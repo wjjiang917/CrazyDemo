@@ -305,4 +305,4 @@
 
 
 #########
-#-keep class com.zhy.ganamrs.mvp.model.entity.** { *; }
+-keep class com.crazyjiang.crazydemo.mvp.model.entity.** { *; }
