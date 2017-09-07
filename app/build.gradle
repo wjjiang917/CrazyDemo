@@ -1,15 +1,18 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
     defaultConfig {
         applicationId "com.crazyjiang.crazydemo"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
 
         ndk {
             // 设置支持的SO库架构
@@ -20,22 +23,57 @@ android {
     }
     buildTypes {
         release {
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    greendao {
+        schemaVersion 1//数据库版本号
+        daoPackage 'com.crazyjiang.crazydemo.app.greendao'//设置DaoMaster、DaoSession、Dao包名
+        targetGenDir 'src/main/java'
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude module: 'jsr305'
+    })
+    //support
+    compile(rootProject.ext.dependencies["cardview-v7"]) {
+        exclude module: 'support-annotations'
+    }
+    //tools
+    provided rootProject.ext.dependencies["javax.annotation"]
+    annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
+    compile rootProject.ext.dependencies["progressmanager"]
+    //view
+    annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {
+        exclude module: 'support-annotations'
+        exclude module: 'butterknife-annotations'
+    }
+    compile rootProject.ext.dependencies["paginate"]
+    //test
+    testCompile rootProject.ext.dependencies["junit"]
+    debugCompile rootProject.ext.dependencies["canary-debug"]
+    releaseCompile rootProject.ext.dependencies["canary-release"]
+    testCompile rootProject.ext.dependencies["canary-release"]
 
-    implementation "com.android.support:appcompat-v7:$rootProject.support"
-    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayout"
+    compile rootProject.ext.dependencies["androideventbus"]//eventbus
+    compile rootProject.ext.dependencies["arouter"]
+    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
 
-    // test
-    testImplementation "junit:junit:$rootProject.junit"
-    androidTestImplementation "com.android.support.test:runner:$rootProject.runner"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.espressoCore"
-
-    compile project(':library.common')
+    compile 'com.roughike:bottom-bar:2.3.1' //底部导航
+    compile 'me.jessyan:arms:2.2.0' //使用Rxjava2
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
+    compile 'org.greenrobot:greendao:3.2.2' // greenDao
+    compile 'me.yuqirong:cardswipelayout:1.0.0'//仿探探
 }
