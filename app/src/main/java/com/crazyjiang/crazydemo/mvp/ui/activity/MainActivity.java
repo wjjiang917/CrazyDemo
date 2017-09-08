@@ -20,7 +20,7 @@ import com.crazyjiang.crazydemo.di.module.MainModule;
 import com.crazyjiang.crazydemo.mvp.contract.MainContract;
 import com.crazyjiang.crazydemo.mvp.presenter.MainPresenter;
 import com.crazyjiang.crazydemo.mvp.ui.fragment.CollectFragment;
-import com.crazyjiang.crazydemo.mvp.ui.fragment.HomeFragment;
+import com.crazyjiang.crazydemo.mvp.ui.fragment.VideosFragment;
 import com.crazyjiang.crazydemo.mvp.ui.fragment.WelfareFragment;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -99,23 +99,23 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             mNavIds.add(R.id.tab_inbox);
         }
 
-        HomeFragment homeFragment;
+        VideosFragment videosFragment;
         WelfareFragment welfareFragment;
         CollectFragment collectFragment;
         if (savedInstanceState == null) {
-            homeFragment = HomeFragment.newInstance();
+            videosFragment = VideosFragment.newInstance();
             welfareFragment = WelfareFragment.newInstance();
             collectFragment = CollectFragment.newInstance();
         } else {
             mIndex = savedInstanceState.getInt(Constant.TAB_INDEX);
             FragmentManager fm = getSupportFragmentManager();
-            homeFragment = (HomeFragment) FragmentUtils.findFragment(fm, HomeFragment.class);
+            videosFragment = (VideosFragment) FragmentUtils.findFragment(fm, VideosFragment.class);
             welfareFragment = (WelfareFragment) FragmentUtils.findFragment(fm, WelfareFragment.class);
             collectFragment = (CollectFragment) FragmentUtils.findFragment(fm, CollectFragment.class);
         }
         if (mFragments == null) {
             mFragments = new ArrayList<>();
-            mFragments.add(homeFragment);
+            mFragments.add(videosFragment);
             mFragments.add(welfareFragment);
             mFragments.add(collectFragment);
         }

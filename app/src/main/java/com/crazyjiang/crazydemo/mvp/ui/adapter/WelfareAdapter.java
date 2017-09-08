@@ -6,7 +6,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.crazyjiang.crazydemo.R;
 import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
-import com.crazyjiang.crazydemo.mvp.ui.holder.WelfareHolder;
+import com.crazyjiang.crazydemo.mvp.ui.holder.CommonHolder;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Administrator on 2017/7/6.
  */
 
-public class WelfareAdapter extends BaseQuickAdapter<GankEntity.ResultsBean,WelfareHolder> {
+public class WelfareAdapter extends BaseQuickAdapter<GankEntity.ResultsBean,CommonHolder> {
 
 
     public WelfareAdapter( @Nullable List<GankEntity.ResultsBean> data) {
@@ -22,7 +22,7 @@ public class WelfareAdapter extends BaseQuickAdapter<GankEntity.ResultsBean,Welf
     }
 
     @Override
-    protected void convert(WelfareHolder helper, GankEntity.ResultsBean item) {
+    protected void convert(CommonHolder helper, GankEntity.ResultsBean item) {
         helper.mImageLoader.loadImage(helper.mAppComponent.appManager().getCurrentActivity() == null
                         ? helper.mAppComponent.application() : helper.mAppComponent.appManager().getCurrentActivity(),
                 ImageConfigImpl

@@ -6,7 +6,9 @@ package com.crazyjiang.crazydemo.app.constant;
 
 public interface Constant {
     // http
-    String SERVER_IP = "http://gank.io/";
+    String SERVER_IP = "http://www.streamkar.com/";
+
+    // return code
     String SUCCESS_CODE = "0";
 
     // GreenDao
