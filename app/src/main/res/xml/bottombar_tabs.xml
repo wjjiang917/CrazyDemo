@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        icon="@drawable/ic_video_library_black_24dp"
+        id="@+id/tab_home"
+        title="@string/title_video" />
+    <tab
+        icon="@drawable/ic_dashboard_black_24dp"
+        id="@+id/tab_dashboard"
+        title="@string/title_talents" />
+    <tab
+        icon="@mipmap/ic_friends"
+        id="@+id/tab_mycenter"
+        title="@string/title_me" />
+</tabs>
