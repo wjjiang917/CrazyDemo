@@ -52,13 +52,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     private OnTabSelectListener mOnTabSelectListener = tabId -> {
         switch (tabId) {
-            case R.id.tab_home:
+            case R.id.tab_videos:
                 mIndex = 0;
                 break;
-            case R.id.tab_dashboard:
+            case R.id.tab_talents:
                 mIndex = 1;
                 break;
-            case R.id.tab_mycenter:
+            case R.id.tab_inbox:
                 mIndex = 2;
                 break;
         }
@@ -90,13 +90,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             mTitles = new ArrayList<>();
             mTitles.add(R.string.title_video);
             mTitles.add(R.string.title_talents);
-            mTitles.add(R.string.title_me);
+            mTitles.add(R.string.title_inbox);
         }
         if (mNavIds == null) {
             mNavIds = new ArrayList<>();
-            mNavIds.add(R.id.tab_home);
-            mNavIds.add(R.id.tab_dashboard);
-            mNavIds.add(R.id.tab_mycenter);
+            mNavIds.add(R.id.tab_videos);
+            mNavIds.add(R.id.tab_talents);
+            mNavIds.add(R.id.tab_inbox);
         }
 
         HomeFragment homeFragment;

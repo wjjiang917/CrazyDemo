@@ -2,14 +2,14 @@
 <tabs>
     <tab
         icon="@drawable/ic_video_library_black_24dp"
-        id="@+id/tab_home"
+        id="@+id/tab_videos"
         title="@string/title_video" />
     <tab
-        icon="@drawable/ic_dashboard_black_24dp"
-        id="@+id/tab_dashboard"
+        icon="@drawable/ic_image_black_24dp"
+        id="@+id/tab_talents"
         title="@string/title_talents" />
     <tab
-        icon="@mipmap/ic_friends"
-        id="@+id/tab_mycenter"
-        title="@string/title_me" />
+        icon="@drawable/ic_mail_black_24dp"
+        id="@+id/tab_inbox"
+        title="@string/title_inbox" />
 </tabs>
