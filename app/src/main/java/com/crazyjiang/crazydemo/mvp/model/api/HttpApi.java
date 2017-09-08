@@ -1,4 +1,4 @@
-package com.crazyjiang.crazydemo.mvp.model.api.service;
+package com.crazyjiang.crazydemo.mvp.model.api;
 
 import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
 
@@ -8,11 +8,8 @@ import retrofit2.http.Path;
 
 /**
  * 存放通用的一些API
- * Created by jess on 8/5/16 12:05
- * contact with jess.yan.effort@gmail.com
  */
-public interface CommonService {
-
+public interface HttpApi {
     @GET("api/data/{type}/{pageSize}/{page}")
     Observable<GankEntity> gank(@Path("type") String type, @Path("pageSize") int pageSize, @Path("page") String page);
 

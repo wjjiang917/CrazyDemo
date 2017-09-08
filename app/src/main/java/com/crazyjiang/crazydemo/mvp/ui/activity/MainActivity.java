@@ -12,13 +12,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.jess.arms.base.BaseActivity;
-import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.utils.ArmsUtils;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.crazyjiang.crazydemo.R;
+import com.crazyjiang.crazydemo.app.constant.Constant;
 import com.crazyjiang.crazydemo.app.utils.FragmentUtils;
 import com.crazyjiang.crazydemo.di.component.DaggerMainComponent;
 import com.crazyjiang.crazydemo.di.module.MainModule;
@@ -27,6 +22,12 @@ import com.crazyjiang.crazydemo.mvp.presenter.MainPresenter;
 import com.crazyjiang.crazydemo.mvp.ui.fragment.CollectFragment;
 import com.crazyjiang.crazydemo.mvp.ui.fragment.HomeFragment;
 import com.crazyjiang.crazydemo.mvp.ui.fragment.WelfareFragment;
+import com.jess.arms.base.BaseActivity;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabSelectListener;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,37 +35,35 @@ import java.util.List;
 import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
-import static com.crazyjiang.crazydemo.app.EventBusTags.ACTIVITY_FRAGMENT_REPLACE;
 
 public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View {
-
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
     @BindView(R.id.bottomBar)
     BottomBar mBottomBar;
     @BindView(R.id.toolbar_back)
     RelativeLayout toolbarBack;
+
     private RxPermissions mRxPermissions;
     private List<Integer> mTitles;
     private List<Fragment> mFragments;
     private List<Integer> mNavIds;
-    private int mReplace = 0;
-
+    private int mIndex = 0;
 
     private OnTabSelectListener mOnTabSelectListener = tabId -> {
         switch (tabId) {
             case R.id.tab_home:
-                mReplace = 0;
+                mIndex = 0;
                 break;
             case R.id.tab_dashboard:
-                mReplace = 1;
+                mIndex = 1;
                 break;
             case R.id.tab_mycenter:
-                mReplace = 2;
+                mIndex = 2;
                 break;
         }
-        mToolbarTitle.setText(mTitles.get(mReplace));
-        FragmentUtils.hideAllShowFragment(mFragments.get(mReplace));
+        mToolbarTitle.setText(mTitles.get(mIndex));
+        FragmentUtils.hideAllShowFragment(mFragments.get(mIndex));
     };
 
     @Override
@@ -108,7 +107,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             welfareFragment = WelfareFragment.newInstance();
             collectFragment = CollectFragment.newInstance();
         } else {
-            mReplace = savedInstanceState.getInt(ACTIVITY_FRAGMENT_REPLACE);
+            mIndex = savedInstanceState.getInt(Constant.TAB_INDEX);
             FragmentManager fm = getSupportFragmentManager();
             homeFragment = (HomeFragment) FragmentUtils.findFragment(fm, HomeFragment.class);
             welfareFragment = (WelfareFragment) FragmentUtils.findFragment(fm, WelfareFragment.class);
@@ -123,7 +122,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         FragmentUtils.addFragments(getSupportFragmentManager(), mFragments, R.id.main_frame, 0);
         mBottomBar.setOnTabSelectListener(mOnTabSelectListener);
     }
-
 
     @Override
     public void showLoading() {
@@ -162,23 +160,24 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //保存当前Activity显示的Fragment索引
-        outState.putInt(ACTIVITY_FRAGMENT_REPLACE, mReplace);
+        outState.putInt(Constant.TAB_INDEX, mIndex);
     }
 
     @Override
     protected void onDestroy() {
+        // fix Memory Leak / ANR from InputMethodManager
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         try {
-            InputMethodManager.class.getDeclaredMethod("windowDismissed", IBinder.class).invoke(imm,
-                    getWindow().getDecorView().getWindowToken());
+            InputMethodManager.class.getDeclaredMethod("windowDismissed", IBinder.class)
+                    .invoke(imm, getWindow().getDecorView().getWindowToken());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         super.onDestroy();
         this.mRxPermissions = null;
         this.mTitles = null;
         this.mFragments = null;
         this.mNavIds = null;
     }
-
 }

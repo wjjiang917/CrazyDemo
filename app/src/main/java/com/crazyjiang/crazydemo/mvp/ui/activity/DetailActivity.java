@@ -16,27 +16,25 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.jess.arms.base.BaseActivity;
-import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
-import com.jess.arms.utils.ArmsUtils;
 import com.crazyjiang.crazydemo.R;
+import com.crazyjiang.crazydemo.app.constant.Constant;
 import com.crazyjiang.crazydemo.di.component.DaggerDetailComponent;
 import com.crazyjiang.crazydemo.di.module.DetailModule;
 import com.crazyjiang.crazydemo.mvp.contract.DetailContract;
 import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
 import com.crazyjiang.crazydemo.mvp.presenter.DetailPresenter;
+import com.jess.arms.base.BaseActivity;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
+import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
 
+import static com.crazyjiang.crazydemo.app.constant.ARouterPaths.MAIN_DETAIL;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
-import static com.crazyjiang.crazydemo.app.ARouterPaths.MAIN_DETAIL;
-import static com.crazyjiang.crazydemo.app.EventBusTags.EXTRA_DETAIL;
 
 @Route(path = MAIN_DETAIL)
 public class DetailActivity extends BaseActivity<DetailPresenter> implements DetailContract.View {
-
-
     @BindView(R.id.imageView)
     ImageView imageView;
     @BindView(R.id.toolbar)
@@ -65,9 +63,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        entity = (GankEntity.ResultsBean) getIntent()
-                .getExtras()
-                .getSerializable(EXTRA_DETAIL);
+        entity = (GankEntity.ResultsBean) getIntent().getExtras().getSerializable(Constant.EXTRA_DETAIL);
         mPresenter.getGirl();
         mPresenter.getQuery(entity._id);
         if (toolbar != null) {
@@ -85,10 +81,10 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
         // TODO: 2017/7/13 添加到收藏夹
         fab.setOnClickListener(v -> {
             if (isFavorite) {
-                ArmsUtils.makeText(this,"已移除收藏夹");
+                ArmsUtils.makeText(this, "已移除收藏夹");
                 mPresenter.removeByid(entity);
             } else {
-                ArmsUtils.makeText(this,"已添加到收藏夹");
+                ArmsUtils.makeText(this, "已添加到收藏夹");
                 mPresenter.addToFavorites(entity);
             }
         });
@@ -100,13 +96,14 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
     @Override
     public void onFavoriteChange(boolean isFavorite) {
         this.isFavorite = isFavorite;
-        if (isFavorite){
+        if (isFavorite) {
             fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-        }else {
+        } else {
             fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.C4)));
         }
 
     }
+
     private void initWebView() {
         WebSettings settings = webview.getSettings();
         settings.setUseWideViewPort(true);
@@ -114,7 +111,7 @@ public class DetailActivity extends BaseActivity<DetailPresenter> implements Det
         settings.setSupportZoom(true);
         settings.setBuiltInZoomControls(true);
         settings.setDisplayZoomControls(false);
-        webview.setWebViewClient(new WebViewClient(){
+        webview.setWebViewClient(new WebViewClient() {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {

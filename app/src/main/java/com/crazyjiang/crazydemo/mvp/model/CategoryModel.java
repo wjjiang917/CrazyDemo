@@ -2,13 +2,13 @@ package com.crazyjiang.crazydemo.mvp.model;
 
 import android.app.Application;
 
+import com.crazyjiang.crazydemo.mvp.contract.CategoryContract;
+import com.crazyjiang.crazydemo.mvp.model.api.HttpApi;
+import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
 import com.google.gson.Gson;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
-import com.crazyjiang.crazydemo.mvp.contract.CategoryContract;
-import com.crazyjiang.crazydemo.mvp.model.api.service.CommonService;
-import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
 
 import javax.inject.Inject;
 
@@ -20,6 +20,7 @@ public class CategoryModel extends BaseModel implements CategoryContract.Model {
     private Gson mGson;
     private Application mApplication;
     public static final int USERS_PER_PAGESIZE = 10;
+
     @Inject
     public CategoryModel(IRepositoryManager repositoryManager, Gson gson, Application application) {
         super(repositoryManager);
@@ -36,7 +37,6 @@ public class CategoryModel extends BaseModel implements CategoryContract.Model {
 
     @Override
     public Observable<GankEntity> gank(String type, String page) {
-        return mRepositoryManager.obtainRetrofitService(CommonService.class)
-                .gank(type, USERS_PER_PAGESIZE, page);
+        return mRepositoryManager.obtainRetrofitService(HttpApi.class).gank(type, USERS_PER_PAGESIZE, page);
     }
 }

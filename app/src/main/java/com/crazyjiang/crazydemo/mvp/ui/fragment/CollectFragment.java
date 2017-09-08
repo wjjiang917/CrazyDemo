@@ -10,15 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jess.arms.base.BaseFragment;
-import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.utils.ArmsUtils;
 import com.crazyjiang.crazydemo.R;
 import com.crazyjiang.crazydemo.di.component.DaggerCollectComponent;
 import com.crazyjiang.crazydemo.di.module.CollectModule;
 import com.crazyjiang.crazydemo.mvp.contract.CollectContract;
 import com.crazyjiang.crazydemo.mvp.presenter.CollectPresenter;
 import com.crazyjiang.crazydemo.mvp.ui.adapter.CollectViewPagerAdapter;
+import com.jess.arms.base.BaseFragment;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +27,7 @@ import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-
 public class CollectFragment extends BaseFragment<CollectPresenter> implements CollectContract.View {
-
-
     @BindView(R.id.tabs)
     TabLayout tabs;
     @BindView(R.id.mainPager)
@@ -38,8 +35,7 @@ public class CollectFragment extends BaseFragment<CollectPresenter> implements C
     private List<Fragment> mFragments;
 
     public static CollectFragment newInstance() {
-        CollectFragment fragment = new CollectFragment();
-        return fragment;
+        return new CollectFragment();
     }
 
     @Override
@@ -65,9 +61,10 @@ public class CollectFragment extends BaseFragment<CollectPresenter> implements C
             mFragments.add(ArticleFragment.newInstance());
         }
         mainPager.setOffscreenPageLimit(mFragments.size());
-        mainPager.setAdapter(new CollectViewPagerAdapter(getChildFragmentManager(),mFragments));
+        mainPager.setAdapter(new CollectViewPagerAdapter(getChildFragmentManager(), mFragments));
         tabs.setupWithViewPager(mainPager);
     }
+
     /**
      * 此方法是让外部调用使fragment做一些操作的,比如说外部的activity想让fragment对象执行一些方法,
      * 建议在有多个需要让外界调用的方法时,统一传Message,通过what字段,来区分不同的方法,在setData

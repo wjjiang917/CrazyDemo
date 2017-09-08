@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.utils.ArmsUtils;
 import com.crazyjiang.crazydemo.R;
 import com.crazyjiang.crazydemo.app.base.BaseFragment;
 import com.crazyjiang.crazydemo.di.component.DaggerMeiziComponent;
@@ -24,6 +22,8 @@ import com.crazyjiang.crazydemo.mvp.model.entity.DaoGankEntity;
 import com.crazyjiang.crazydemo.mvp.presenter.MeiziPresenter;
 import com.crazyjiang.crazydemo.mvp.ui.adapter.MeiziAdapter;
 import com.crazyjiang.crazydemo.mvp.ui.widget.SpacesItemDecoration;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
 
 import org.simple.eventbus.Subscriber;
 
@@ -33,13 +33,10 @@ import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.crazyjiang.crazydemo.R.id.recyclerView;
+import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-
-public class MeiziFragment extends BaseFragment<MeiziPresenter> implements MeiziContract.View , SwipeRefreshLayout.OnRefreshListener{
-
-
+public class MeiziFragment extends BaseFragment<MeiziPresenter> implements MeiziContract.View, SwipeRefreshLayout.OnRefreshListener {
     @BindView(recyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.refreshLayout)
@@ -48,8 +45,7 @@ public class MeiziFragment extends BaseFragment<MeiziPresenter> implements Meizi
     private MeiziAdapter mAdapter;
 
     public static MeiziFragment newInstance() {
-        MeiziFragment fragment = new MeiziFragment();
-        return fragment;
+        return new MeiziFragment();
     }
 
     @Override
@@ -70,7 +66,7 @@ public class MeiziFragment extends BaseFragment<MeiziPresenter> implements Meizi
     @Override
     public void initData(Bundle savedInstanceState) {
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        ArmsUtils.configRecycleView(mRecyclerView,new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        ArmsUtils.configRecycleView(mRecyclerView, new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mAdapter = new MeiziAdapter(null);
         mAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
@@ -82,7 +78,7 @@ public class MeiziFragment extends BaseFragment<MeiziPresenter> implements Meizi
         textView.setGravity(Gravity.CENTER);
         mAdapter.setEmptyView(textView);
 
-        SpacesItemDecoration decoration=new SpacesItemDecoration(16);
+        SpacesItemDecoration decoration = new SpacesItemDecoration(16);
         mRecyclerView.addItemDecoration(decoration);
 
         mRecyclerView.setAdapter(mAdapter);
@@ -113,9 +109,10 @@ public class MeiziFragment extends BaseFragment<MeiziPresenter> implements Meizi
 
 
     @Subscriber(tag = "meizi")
-    private void updateAdapter(Object o){
+    private void updateAdapter(Object o) {
         mPresenter.requestData(true);
     }
+
     /**
      * 此方法是让外部调用使fragment做一些操作的,比如说外部的activity想让fragment对象执行一些方法,
      * 建议在有多个需要让外界调用的方法时,统一传Message,通过what字段,来区分不同的方法,在setData
@@ -165,6 +162,4 @@ public class MeiziFragment extends BaseFragment<MeiziPresenter> implements Meizi
     public void onRefresh() {
         mPresenter.requestData(true);
     }
-
-
 }

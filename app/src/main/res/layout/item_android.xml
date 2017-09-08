@@ -11,7 +11,6 @@
     app:cardCornerRadius="@dimen/m8"
     app:cardElevation="@dimen/m10">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

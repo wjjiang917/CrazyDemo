@@ -42,10 +42,7 @@ import me.yuqirong.cardswipelayout.OnSwipeListener;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 import static com.crazyjiang.crazydemo.R.id.recyclerView;
 
-
-public class WelfareFragment extends BaseFragment<WelfarePresenter> implements WelfareContract.View, SwipeRefreshLayout.OnRefreshListener{
-
-
+public class WelfareFragment extends BaseFragment<WelfarePresenter> implements WelfareContract.View, SwipeRefreshLayout.OnRefreshListener {
     @BindView(recyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.refreshLayout)
@@ -54,8 +51,7 @@ public class WelfareFragment extends BaseFragment<WelfarePresenter> implements W
     private WelfareAdapter mAdapter;
 
     public static WelfareFragment newInstance() {
-        WelfareFragment fragment = new WelfareFragment();
-        return fragment;
+        return new WelfareFragment();
     }
 
     @Override
@@ -104,12 +100,13 @@ public class WelfareFragment extends BaseFragment<WelfarePresenter> implements W
     }
 
     private void collectWelfare(Object o) {
-        GankEntity.ResultsBean entity = (GankEntity.ResultsBean)o;
+        GankEntity.ResultsBean entity = (GankEntity.ResultsBean) o;
         mPresenter.addToFavorites(entity);
     }
 
     private static final DecelerateInterpolator DECCELERATE_INTERPOLATOR = new DecelerateInterpolator();
     private static final AccelerateInterpolator ACCELERATE_INTERPOLATOR = new AccelerateInterpolator();
+
     private void animatePhotoLike(View view) {
         View ivLike = view.findViewById(R.id.ivLike);
         ivLike.setVisibility(View.VISIBLE);
@@ -140,6 +137,7 @@ public class WelfareFragment extends BaseFragment<WelfarePresenter> implements W
     }
 
     private long[] mHits = new long[2];
+
     @Override
     protected void onFragmentFirstVisible() {
         //去服务器下载数据
@@ -220,7 +218,7 @@ public class WelfareFragment extends BaseFragment<WelfarePresenter> implements W
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, Object o, int direction) {
                 mPresenter.requestData(false);
-                if(direction == CardConfig.SWIPED_RIGHT){
+                if (direction == CardConfig.SWIPED_RIGHT) {
                     collectWelfare(o);
                 }
             }
@@ -236,7 +234,7 @@ public class WelfareFragment extends BaseFragment<WelfarePresenter> implements W
         touchHelper.attachToRecyclerView(mRecyclerView);
 
         mAdapter.setNewData(mData);
-        if (mAdapter.getData().size() < 2){
+        if (mAdapter.getData().size() < 2) {
             mPresenter.requestData(false);
         }
     }

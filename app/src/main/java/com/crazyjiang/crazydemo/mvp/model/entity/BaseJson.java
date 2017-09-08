@@ -1,10 +1,8 @@
 package com.crazyjiang.crazydemo.mvp.model.entity;
 
-
-import com.crazyjiang.crazydemo.mvp.model.api.Api;
+import com.crazyjiang.crazydemo.app.constant.Constant;
 
 import java.io.Serializable;
-
 
 /**
  * 如果你服务器返回的数据固定为这种方式(字段名可根据服务器更改)
@@ -12,8 +10,7 @@ import java.io.Serializable;
  * Created by jess on 26/09/2016 15:19
  * Contact with jess.yan.effort@gmail.com
  */
-
-public class BaseJson<T> implements Serializable{
+public class BaseJson<T> implements Serializable {
     private T data;
     private String code;
     private String msg;
@@ -32,10 +29,11 @@ public class BaseJson<T> implements Serializable{
 
     /**
      * 请求是否成功
+     *
      * @return
      */
     public boolean isSuccess() {
-        if (code.equals(Api.RequestSuccess)) {
+        if (code.equals(Constant.SUCCESS_CODE)) {
             return true;
         } else {
             return false;

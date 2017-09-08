@@ -12,7 +12,6 @@ import javax.inject.Inject;
 
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
-
 @ActivityScope
 public class ArticlePresenter extends BasePresenter<ArticleContract.Model, ArticleContract.View> {
     private RxErrorHandler mErrorHandler;
@@ -21,9 +20,9 @@ public class ArticlePresenter extends BasePresenter<ArticleContract.Model, Artic
     private AppManager mAppManager;
 
     @Inject
-    public ArticlePresenter(ArticleContract.Model model, ArticleContract.View rootView
-            , RxErrorHandler handler, Application application
-            , ImageLoader imageLoader, AppManager appManager) {
+    public ArticlePresenter(ArticleContract.Model model, ArticleContract.View rootView,
+                            RxErrorHandler handler, Application application,
+                            ImageLoader imageLoader, AppManager appManager) {
         super(model, rootView);
         this.mErrorHandler = handler;
         this.mApplication = application;

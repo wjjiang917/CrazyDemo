@@ -14,10 +14,9 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.utils.ArmsUtils;
 import com.crazyjiang.crazydemo.R;
 import com.crazyjiang.crazydemo.app.base.BaseFragment;
+import com.crazyjiang.crazydemo.app.constant.Constant;
 import com.crazyjiang.crazydemo.di.component.DaggerArticleComponent;
 import com.crazyjiang.crazydemo.di.module.ArticleModule;
 import com.crazyjiang.crazydemo.mvp.contract.ArticleContract;
@@ -25,6 +24,8 @@ import com.crazyjiang.crazydemo.mvp.model.entity.DaoGankEntity;
 import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
 import com.crazyjiang.crazydemo.mvp.presenter.ArticlePresenter;
 import com.crazyjiang.crazydemo.mvp.ui.adapter.ArticleAdapter;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
 
 import java.util.List;
 
@@ -32,12 +33,10 @@ import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
+import static com.crazyjiang.crazydemo.app.constant.ARouterPaths.MAIN_DETAIL;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
-import static com.crazyjiang.crazydemo.app.ARouterPaths.MAIN_DETAIL;
-import static com.crazyjiang.crazydemo.app.EventBusTags.EXTRA_DETAIL;
 
-
-public class ArticleFragment extends BaseFragment<ArticlePresenter> implements ArticleContract.View , SwipeRefreshLayout.OnRefreshListener{
+public class ArticleFragment extends BaseFragment<ArticlePresenter> implements ArticleContract.View, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
@@ -88,9 +87,7 @@ public class ArticleFragment extends BaseFragment<ArticlePresenter> implements A
             intentArticle.url = bean.url;
             intentArticle.used = bean.used;
             intentArticle.who = bean.who;
-            ARouter.getInstance().build(MAIN_DETAIL)
-                    .withSerializable(EXTRA_DETAIL, intentArticle)
-                    .navigation();
+            ARouter.getInstance().build(MAIN_DETAIL).withSerializable(Constant.EXTRA_DETAIL, intentArticle).navigation();
         });
         TextView textView = new TextView(getContext());
         textView.setText("没有更多内容了");
@@ -98,6 +95,7 @@ public class ArticleFragment extends BaseFragment<ArticlePresenter> implements A
         mAdapter.setEmptyView(textView);
         mRecyclerView.setAdapter(mAdapter);
     }
+
     @Override
     protected void onFragmentFirstVisible() {
         //去服务器下载数据
@@ -132,7 +130,6 @@ public class ArticleFragment extends BaseFragment<ArticlePresenter> implements A
      *
      * @param data
      */
-
 
 
     @Override

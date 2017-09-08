@@ -44,6 +44,7 @@ public final class FragmentUtils {
     private static final String ARGS_ID = "args_id";
     private static final String ARGS_IS_HIDE = "args_is_hide";
     private static final String ARGS_IS_ADD_STACK = "args_is_add_stack";
+
     /**
      * 新增fragment
      *

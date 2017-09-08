@@ -6,6 +6,4 @@ package com.crazyjiang.crazydemo.mvp.model.api.cache;
  * Contact with jess.yan.effort@gmail.com
  */
 public interface CommonCache {
-
-
 }

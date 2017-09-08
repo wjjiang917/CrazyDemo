@@ -1,6 +1,5 @@
 package com.crazyjiang.crazydemo.app;
 
-
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -14,7 +13,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.crazyjiang.crazydemo.BuildConfig;
 import com.crazyjiang.crazydemo.R;
-import com.crazyjiang.crazydemo.mvp.model.api.Api;
+import com.crazyjiang.crazydemo.app.constant.Constant;
 import com.jess.arms.base.App;
 import com.jess.arms.base.delegate.AppLifecycles;
 import com.jess.arms.di.module.GlobalConfigModule;
@@ -31,25 +30,19 @@ import timber.log.Timber;
  * Created by jess on 12/04/2017 17:25
  * Contact with jess.yan.effort@gmail.com
  */
-
 public class GlobalConfiguration implements ConfigModule {
-
-
     @Override
     public void applyOptions(Context context, GlobalConfigModule.Builder builder) {
         //使用builder可以为框架配置一些配置信息
-        builder.baseurl(Api.APP_DOMAIN);
+        builder.baseurl(Constant.SERVER_IP);
     }
 
     @Override
     public void injectAppLifecycle(Context context, List<AppLifecycles> lifecycles) {
         //AppDelegate.Lifecycle 的所有方法都会在基类Application对应的生命周期中被调用,所以在对应的方法中可以扩展一些自己需要的逻辑
         lifecycles.add(new AppLifecycles() {
-
-
             @Override
             public void attachBaseContext(Context base) {
-
             }
 
             @Override
@@ -75,7 +68,6 @@ public class GlobalConfiguration implements ConfigModule {
             }
         });
     }
-
 
     @Override
     public void injectActivityLifecycle(Context context, List<Application.ActivityLifecycleCallbacks> lifecycles) {
@@ -142,7 +134,6 @@ public class GlobalConfiguration implements ConfigModule {
     public void injectFragmentLifecycle(Context context, List<FragmentManager.FragmentLifecycleCallbacks> lifecycles) {
         //向Fragment的生命周期中注入一些自定义逻辑
         lifecycles.add(new FragmentManager.FragmentLifecycleCallbacks() {
-
             @Override
             public void onFragmentCreated(FragmentManager fm, Fragment f, Bundle savedInstanceState) {
                 // 在配置变化的时候将这个 Fragment 保存下来,在 Activity 由于配置变化重建是重复利用已经创建的Fragment。
@@ -157,6 +148,4 @@ public class GlobalConfiguration implements ConfigModule {
             }
         });
     }
-
-
 }

@@ -2,17 +2,16 @@ package com.crazyjiang.crazydemo.mvp.presenter;
 
 import android.app.Application;
 
+import com.crazyjiang.crazydemo.mvp.contract.MainContract;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.PermissionUtil;
-import com.crazyjiang.crazydemo.mvp.contract.MainContract;
 
 import javax.inject.Inject;
 
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
 
 @ActivityScope
 public class MainPresenter extends BasePresenter<MainContract.Model, MainContract.View> {
@@ -32,7 +31,7 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
         this.mAppManager = appManager;
     }
 
-    public void requestPermissions(){
+    public void requestPermissions() {
         PermissionUtil.requestPermission(new PermissionUtil.RequestPermission() {
             @Override
             public void onRequestPermissionSuccess() {
@@ -41,7 +40,7 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
 
             @Override
             public void onRequestPermissionFailure() {
-                mRootView.showMessage("Request permissons failure");
+                mRootView.showMessage("Request permissions failure");
             }
         }, mRootView.getRxPermissions(), mErrorHandler);
     }

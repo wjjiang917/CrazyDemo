@@ -11,29 +11,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.jess.arms.base.DefaultAdapter;
-import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.utils.ArmsUtils;
-import com.paginate.Paginate;
 import com.crazyjiang.crazydemo.R;
 import com.crazyjiang.crazydemo.app.base.BaseFragment;
+import com.crazyjiang.crazydemo.app.constant.Constant;
 import com.crazyjiang.crazydemo.di.component.DaggerCategoryComponent;
 import com.crazyjiang.crazydemo.di.module.CategoryModule;
 import com.crazyjiang.crazydemo.mvp.contract.CategoryContract;
 import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
 import com.crazyjiang.crazydemo.mvp.presenter.CategoryPresenter;
+import com.jess.arms.base.DefaultAdapter;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
+import static com.crazyjiang.crazydemo.app.constant.ARouterPaths.MAIN_DETAIL;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
-import static com.crazyjiang.crazydemo.app.ARouterPaths.MAIN_DETAIL;
-import static com.crazyjiang.crazydemo.app.EventBusTags.EXTRA_DETAIL;
 
-public class CategoryFragment extends BaseFragment<CategoryPresenter> implements CategoryContract.View , SwipeRefreshLayout.OnRefreshListener{
-
-
+public class CategoryFragment extends BaseFragment<CategoryPresenter> implements CategoryContract.View, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.refreshLayout)
@@ -72,10 +70,11 @@ public class CategoryFragment extends BaseFragment<CategoryPresenter> implements
         mSwipeRefreshLayout.setOnRefreshListener(this);
         ArmsUtils.configRecycleView(mRecyclerView, new LinearLayoutManager(getActivity()));
     }
+
     @Override
     protected void onFragmentFirstVisible() {
         //去服务器下载数据
-        mPresenter.requestData(type,true);
+        mPresenter.requestData(type, true);
     }
 
     /**
@@ -127,7 +126,7 @@ public class CategoryFragment extends BaseFragment<CategoryPresenter> implements
 
     @Override
     public void onRefresh() {
-        mPresenter.requestData(type,true);
+        mPresenter.requestData(type, true);
     }
 
     @Override
@@ -145,9 +144,7 @@ public class CategoryFragment extends BaseFragment<CategoryPresenter> implements
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener((View view, int viewType, Object data, int position) -> {
             GankEntity.ResultsBean bean = (GankEntity.ResultsBean) data;
-            ARouter.getInstance().build(MAIN_DETAIL)
-                    .withSerializable(EXTRA_DETAIL, bean)
-                    .navigation();
+            ARouter.getInstance().build(MAIN_DETAIL).withSerializable(Constant.EXTRA_DETAIL, bean).navigation();
         });
         initPaginate();
     }
@@ -157,7 +154,7 @@ public class CategoryFragment extends BaseFragment<CategoryPresenter> implements
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.requestData(type,false);
+                    mPresenter.requestData(type, false);
                 }
 
                 @Override

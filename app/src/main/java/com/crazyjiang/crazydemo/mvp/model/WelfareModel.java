@@ -10,7 +10,7 @@ import com.jess.arms.mvp.BaseModel;
 import com.crazyjiang.crazydemo.app.GreenDaoHelper;
 import com.crazyjiang.crazydemo.app.greendao.DaoGankEntityDao;
 import com.crazyjiang.crazydemo.mvp.contract.WelfareContract;
-import com.crazyjiang.crazydemo.mvp.model.api.service.CommonService;
+import com.crazyjiang.crazydemo.mvp.model.api.HttpApi;
 import com.crazyjiang.crazydemo.mvp.model.entity.DaoGankEntity;
 import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
 
@@ -42,8 +42,7 @@ public class WelfareModel extends BaseModel implements WelfareContract.Model {
 
     @Override
     public Observable<GankEntity> getRandomGirl() {
-        Observable<GankEntity> randomGirl = mRepositoryManager.obtainRetrofitService(CommonService.class)
-                .getRandomGirl();
+        Observable<GankEntity> randomGirl = mRepositoryManager.obtainRetrofitService(HttpApi.class).getRandomGirl();
         return randomGirl;
     }
 
@@ -54,14 +53,14 @@ public class WelfareModel extends BaseModel implements WelfareContract.Model {
                 .queryBuilder()
                 .where(DaoGankEntityDao.Properties._id.eq(daoGankEntity._id))
                 .list();
-        if (list.size() > 0){
-            message.what =  101;
-        }else {
+        if (list.size() > 0) {
+            message.what = 101;
+        } else {
             long insert = GreenDaoHelper.getDaoSession().getDaoGankEntityDao().insert(daoGankEntity);
-            if (insert > 0){
-                message.what =  102;
-            }else {
-                message.what =  103;
+            if (insert > 0) {
+                message.what = 102;
+            } else {
+                message.what = 103;
             }
         }
         return message;

@@ -15,9 +15,9 @@ import java.util.List;
  * Created by zhy on 17-7-20.
  */
 
-public class ArticleAdapter extends BaseQuickAdapter<DaoGankEntity,BaseViewHolder> {
+public class ArticleAdapter extends BaseQuickAdapter<DaoGankEntity, BaseViewHolder> {
 
-    public ArticleAdapter( @Nullable List<DaoGankEntity> data) {
+    public ArticleAdapter(@Nullable List<DaoGankEntity> data) {
         super(R.layout.item_collection, data);
     }
 
@@ -25,11 +25,11 @@ public class ArticleAdapter extends BaseQuickAdapter<DaoGankEntity,BaseViewHolde
     protected void convert(BaseViewHolder helper, DaoGankEntity item) {
         helper.setText(R.id.tvDesc, item.desc);
         ImageView ivImage = helper.getView(R.id.ivImage);
-        if (item.type.equals(CategoryType.ANDROID_STR)){
+        if (item.type.equals(CategoryType.ANDROID_STR)) {
             ivImage.setImageResource(R.mipmap.icon_android);
-        }else  if (item.type.equals(CategoryType.IOS_STR)){
+        } else if (item.type.equals(CategoryType.IOS_STR)) {
             ivImage.setImageResource(R.mipmap.icon_apple);
-        }else  if (item.type.equals(CategoryType.QIAN_STR)){
+        } else if (item.type.equals(CategoryType.QIAN_STR)) {
             ivImage.setImageResource(R.mipmap.html);
         }
     }

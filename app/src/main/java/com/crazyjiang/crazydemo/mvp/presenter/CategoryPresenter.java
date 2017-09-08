@@ -2,15 +2,15 @@ package com.crazyjiang.crazydemo.mvp.presenter;
 
 import android.app.Application;
 
+import com.crazyjiang.crazydemo.app.utils.RxUtils;
+import com.crazyjiang.crazydemo.mvp.contract.CategoryContract;
+import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
+import com.crazyjiang.crazydemo.mvp.ui.adapter.CategoryAdapter;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
-import com.crazyjiang.crazydemo.app.utils.RxUtils;
-import com.crazyjiang.crazydemo.mvp.contract.CategoryContract;
-import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
-import com.crazyjiang.crazydemo.mvp.ui.adapter.CategoryAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,6 @@ import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
-
 
 @ActivityScope
 public class CategoryPresenter extends BasePresenter<CategoryContract.Model, CategoryContract.View> {
@@ -64,12 +63,12 @@ public class CategoryPresenter extends BasePresenter<CategoryContract.Model, Cat
             mRootView.setAdapter(mAdapter);//设置Adapter
         }
 
-        if (pullToRefresh){
+        if (pullToRefresh) {
             lastUserId = 1;//上拉刷新默认只请求第一页
-        }else{
+        } else {
             lastUserId++;
         }
-        mModel.gank(type,String.valueOf(lastUserId))
+        mModel.gank(type, String.valueOf(lastUserId))
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))
                 .doOnSubscribe(disposable -> {

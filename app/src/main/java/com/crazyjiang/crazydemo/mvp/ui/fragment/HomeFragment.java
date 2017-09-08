@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.utils.ArmsUtils;
 import com.crazyjiang.crazydemo.R;
 import com.crazyjiang.crazydemo.app.base.BaseFragment;
 import com.crazyjiang.crazydemo.app.constant.CategoryType;
@@ -20,6 +18,8 @@ import com.crazyjiang.crazydemo.di.module.HomeModule;
 import com.crazyjiang.crazydemo.mvp.contract.HomeContract;
 import com.crazyjiang.crazydemo.mvp.presenter.HomePresenter;
 import com.crazyjiang.crazydemo.mvp.ui.adapter.MianViewPagerAdapter;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,17 +28,15 @@ import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-
 public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View {
-
     @BindView(R.id.tabs)
     TabLayout tabs;
     @BindView(R.id.mainPager)
     ViewPager mainPager;
     private List<Fragment> mFragments;
+
     public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-        return fragment;
+        return new HomeFragment();
     }
 
     @Override
@@ -65,7 +63,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             mFragments.add(CategoryFragment.newInstance(CategoryType.QIAN_STR));
         }
         mainPager.setOffscreenPageLimit(mFragments.size());
-        mainPager.setAdapter(new MianViewPagerAdapter(getChildFragmentManager(),mFragments));
+        mainPager.setAdapter(new MianViewPagerAdapter(getChildFragmentManager(), mFragments));
         tabs.setupWithViewPager(mainPager);
     }
 

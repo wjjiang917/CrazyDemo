@@ -1,18 +1,19 @@
 package com.crazyjiang.crazydemo.mvp.contract;
 
+import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
 import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
-import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
 
 import io.reactivex.Observable;
-
 
 public interface CategoryContract {
     //对于经常使用的关于UI的方法可以定义到BaseView中,如显示隐藏进度条,和显示文字消息
     interface View extends IView {
         void startLoadMore();
+
         void endLoadMore();
+
         void setAdapter(DefaultAdapter mAdapter);
     }
 

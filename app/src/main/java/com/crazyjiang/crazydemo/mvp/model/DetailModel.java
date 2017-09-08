@@ -9,7 +9,7 @@ import com.jess.arms.mvp.BaseModel;
 import com.crazyjiang.crazydemo.app.GreenDaoHelper;
 import com.crazyjiang.crazydemo.app.greendao.DaoGankEntityDao;
 import com.crazyjiang.crazydemo.mvp.contract.DetailContract;
-import com.crazyjiang.crazydemo.mvp.model.api.service.CommonService;
+import com.crazyjiang.crazydemo.mvp.model.api.HttpApi;
 import com.crazyjiang.crazydemo.mvp.model.entity.DaoGankEntity;
 import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
 
@@ -41,7 +41,7 @@ public class DetailModel extends BaseModel implements DetailContract.Model {
 
     @Override
     public Observable<GankEntity> getRandomGirl() {
-        Observable<GankEntity> randomGirl = mRepositoryManager.obtainRetrofitService(CommonService.class)
+        Observable<GankEntity> randomGirl = mRepositoryManager.obtainRetrofitService(HttpApi.class)
                 .getRandomGirl();
         return randomGirl;
     }
