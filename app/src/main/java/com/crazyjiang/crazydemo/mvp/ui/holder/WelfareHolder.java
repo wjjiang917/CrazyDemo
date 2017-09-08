@@ -12,7 +12,6 @@ import com.jess.arms.utils.ArmsUtils;
  */
 
 public class WelfareHolder extends BaseViewHolder {
-
     public AppComponent mAppComponent;
     public ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
 
