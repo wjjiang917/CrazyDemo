@@ -21,9 +21,9 @@ import com.crazyjiang.crazydemo.mvp.contract.VideosContract;
 import com.crazyjiang.crazydemo.mvp.model.entity.Video;
 import com.crazyjiang.crazydemo.mvp.presenter.VideosPresenter;
 import com.crazyjiang.crazydemo.mvp.ui.adapter.VideosAdapter;
-import com.crazyjiang.crazydemo.mvp.ui.widget.SpacesItemDecoration;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.paginate.Paginate;
 
 import org.simple.eventbus.Subscriber;
 
@@ -43,6 +43,8 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     private VideosAdapter mAdapter;
+    private boolean isLoadingMore;
+    private Paginate mPaginate;
 
     public static VideosFragment newInstance() {
         return new VideosFragment();
@@ -66,7 +68,11 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
     @Override
     public void initData(Bundle savedInstanceState) {
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        ArmsUtils.configRecycleView(mRecyclerView, new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+
+        ArmsUtils.configRecycleView(mRecyclerView, layoutManager);
+
         mAdapter = new VideosAdapter(null);
         mAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
@@ -78,10 +84,38 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
         textView.setGravity(Gravity.CENTER);
         mAdapter.setEmptyView(textView);
 
-        SpacesItemDecoration decoration = new SpacesItemDecoration(16);
-        mRecyclerView.addItemDecoration(decoration);
-
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                layoutManager.invalidateSpanAssignments();  //防止第一行到顶部有空白区域
+            }
+        });
+
+        if (null == mPaginate) {
+            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
+                @Override
+                public void onLoadMore() {
+                    mPresenter.requestData(false);
+                }
+
+                @Override
+                public boolean isLoading() {
+                    return isLoadingMore;
+                }
+
+                @Override
+                public boolean hasLoadedAllItems() {
+                    return false;
+                }
+            };
+
+            mPaginate = Paginate.with(mRecyclerView, callbacks)
+                    .setLoadingTriggerThreshold(0)
+                    .build();
+            mPaginate.setHasMoreDataToLoad(false);
+        }
     }
 
     @Override
@@ -92,14 +126,12 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
 
     @Override
     public void startLoadMore() {
-        Observable.just(1)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(integer -> mSwipeRefreshLayout.setRefreshing(true));
+        isLoadingMore = true;
     }
 
     @Override
     public void endLoadMore() {
-        mSwipeRefreshLayout.setRefreshing(false);
+        isLoadingMore = false;
     }
 
     @Subscriber(tag = "meizi")
@@ -126,12 +158,16 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
 
     @Override
     public void showLoading() {
-
+        Observable.just(1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(integer -> mSwipeRefreshLayout.setRefreshing(true));
     }
 
     @Override
     public void hideLoading() {
-
+        Observable.just(1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(integer -> mSwipeRefreshLayout.setRefreshing(true));
     }
 
     @Override
@@ -154,6 +190,12 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
     @Override
     public void onRefresh() {
         mPresenter.requestData(true);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.mPaginate = null;
     }
 
     @Override
