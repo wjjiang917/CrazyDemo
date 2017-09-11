@@ -28,7 +28,6 @@ import me.yuqirong.cardswipelayout.CardConfig;
 import me.yuqirong.cardswipelayout.CardItemTouchHelperCallback;
 import me.yuqirong.cardswipelayout.CardLayoutManager;
 import me.yuqirong.cardswipelayout.OnSwipeListener;
-import timber.log.Timber;
 
 import static com.crazyjiang.crazydemo.R.id.rv_posters;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -138,9 +137,9 @@ public class PostersFragment extends BaseFragment<PostersPresenter> implements P
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, RoomEntity roomEntity, int direction) {
                 if (direction == CardConfig.SWIPED_RIGHT) {
-                    Timber.i("swiped right");
+                    ArmsUtils.makeText(getContext(), "swipe right");
                 } else if (direction == CardConfig.SWIPED_LEFT) {
-                    Timber.i("swiped left");
+                    ArmsUtils.makeText(getContext(), "swipe left");
                 }
             }
 
