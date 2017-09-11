@@ -129,7 +129,7 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
     public void hideLoading() {
         Observable.just(1)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(integer -> mSwipeRefreshLayout.setRefreshing(true));
+                .subscribe(integer -> mSwipeRefreshLayout.setRefreshing(false));
     }
 
     @Override
@@ -157,10 +157,6 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
 
     @Override
     public void onVideosLoaded(List<Video> mData) {
-        if (mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-
         if (loadMore) {
             mAdapter.addData(mData);
         } else {

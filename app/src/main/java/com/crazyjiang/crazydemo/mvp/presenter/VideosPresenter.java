@@ -65,8 +65,16 @@ public class VideosPresenter extends BasePresenter<VideosContract.Model, VideosC
         mModel.getVideos(start, PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))
+                .doOnSubscribe(disposable -> {
+                    if (!loadMore)
+                        mRootView.showLoading();//显示上拉刷新的进度条
+                })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(() -> {
+                    if (!loadMore)
+                        mRootView.hideLoading();//隐藏上拉刷新的进度条
+                })
                 .compose(RxUtils.bindToLifecycle(mRootView))//使用Rxlifecycle,使Disposable和Activity一起销毁
                 .subscribe(new ErrorHandleSubscriber<QueryResp<List<Video>>>(mErrorHandler) {
                     @Override
