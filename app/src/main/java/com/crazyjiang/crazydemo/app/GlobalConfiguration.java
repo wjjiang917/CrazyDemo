@@ -18,6 +18,7 @@ import com.jess.arms.base.App;
 import com.jess.arms.base.delegate.AppLifecycles;
 import com.jess.arms.di.module.GlobalConfigModule;
 import com.jess.arms.integration.ConfigModule;
+import com.jess.arms.utils.ArmsUtils;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -33,8 +34,15 @@ import timber.log.Timber;
 public class GlobalConfiguration implements ConfigModule {
     @Override
     public void applyOptions(Context context, GlobalConfigModule.Builder builder) {
-        //使用builder可以为框架配置一些配置信息
+        // 使用builder可以为框架配置一些配置信息
         builder.baseurl(Constant.SERVER_IP);
+
+        // 用来提供处理所有错误的监听
+        // rxjava必要要使用ErrorHandleSubscriber(默认实现Subscriber的onError方法),此监听才生效
+        builder.responseErrorListener((context1, t) -> {
+            Timber.e(t.getMessage());
+            ArmsUtils.snackbarText("Network error");
+        });
     }
 
     @Override

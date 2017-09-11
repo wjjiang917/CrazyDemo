@@ -19,9 +19,9 @@ import com.crazyjiang.crazydemo.di.component.DaggerMainComponent;
 import com.crazyjiang.crazydemo.di.module.MainModule;
 import com.crazyjiang.crazydemo.mvp.contract.MainContract;
 import com.crazyjiang.crazydemo.mvp.presenter.MainPresenter;
-import com.crazyjiang.crazydemo.mvp.ui.fragment.CollectFragment;
+import com.crazyjiang.crazydemo.mvp.ui.fragment.InboxFragment;
+import com.crazyjiang.crazydemo.mvp.ui.fragment.PostersFragment;
 import com.crazyjiang.crazydemo.mvp.ui.fragment.VideosFragment;
-import com.crazyjiang.crazydemo.mvp.ui.fragment.WelfareFragment;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -100,24 +100,24 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         }
 
         VideosFragment videosFragment;
-        WelfareFragment welfareFragment;
-        CollectFragment collectFragment;
+        PostersFragment postersFragment;
+        InboxFragment inboxFragment;
         if (savedInstanceState == null) {
             videosFragment = VideosFragment.newInstance();
-            welfareFragment = WelfareFragment.newInstance();
-            collectFragment = CollectFragment.newInstance();
+            postersFragment = PostersFragment.newInstance();
+            inboxFragment = InboxFragment.newInstance();
         } else {
             mIndex = savedInstanceState.getInt(Constant.TAB_INDEX);
             FragmentManager fm = getSupportFragmentManager();
             videosFragment = (VideosFragment) FragmentUtils.findFragment(fm, VideosFragment.class);
-            welfareFragment = (WelfareFragment) FragmentUtils.findFragment(fm, WelfareFragment.class);
-            collectFragment = (CollectFragment) FragmentUtils.findFragment(fm, CollectFragment.class);
+            postersFragment = (PostersFragment) FragmentUtils.findFragment(fm, PostersFragment.class);
+            inboxFragment = (InboxFragment) FragmentUtils.findFragment(fm, InboxFragment.class);
         }
         if (mFragments == null) {
             mFragments = new ArrayList<>();
             mFragments.add(videosFragment);
-            mFragments.add(welfareFragment);
-            mFragments.add(collectFragment);
+            mFragments.add(postersFragment);
+            mFragments.add(inboxFragment);
         }
         FragmentUtils.addFragments(getSupportFragmentManager(), mFragments, R.id.main_frame, 0);
         mBottomBar.setOnTabSelectListener(mOnTabSelectListener);

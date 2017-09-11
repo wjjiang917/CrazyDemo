@@ -5,7 +5,7 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
-public class Video {
+public class VideoEntity {
     /**
      * video id
      */
@@ -64,8 +64,8 @@ public class Video {
     Long pubTime;
     Long createTime;
     String nickName;
-    @Generated(hash = 353230225)
-    public Video(Integer id, Integer userId, int source, String mediaId,
+    @Generated(hash = 971251383)
+    public VideoEntity(Integer id, Integer userId, int source, String mediaId,
             String caption, String lowUrl, String standardUrl, String lowImages,
             String standardImages, String link, String tags, int oriLikes,
             int likes, int comments, int plays, int status, String rawData,
@@ -92,8 +92,8 @@ public class Video {
         this.createTime = createTime;
         this.nickName = nickName;
     }
-    @Generated(hash = 237528154)
-    public Video() {
+    @Generated(hash = 1984976152)
+    public VideoEntity() {
     }
     public Integer getId() {
         return this.id;

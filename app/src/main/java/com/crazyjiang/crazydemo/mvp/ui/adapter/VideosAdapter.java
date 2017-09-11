@@ -9,18 +9,18 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.crazyjiang.crazydemo.R;
-import com.crazyjiang.crazydemo.mvp.model.entity.Video;
+import com.crazyjiang.crazydemo.mvp.model.entity.VideoEntity;
 import com.crazyjiang.crazydemo.mvp.ui.holder.CommonHolder;
 
 import java.util.List;
 
-public class VideosAdapter extends BaseQuickAdapter<Video, CommonHolder> {
-    public VideosAdapter(@Nullable List<Video> data) {
+public class VideosAdapter extends BaseQuickAdapter<VideoEntity, CommonHolder> {
+    public VideosAdapter(@Nullable List<VideoEntity> data) {
         super(R.layout.item_videos, data);
     }
 
     @Override
-    protected void convert(CommonHolder helper, Video item) {
+    protected void convert(CommonHolder helper, VideoEntity item) {
         ImageView view = helper.getView(R.id.iv_video_image);
         Glide.with(helper.mAppComponent.appManager().getCurrentActivity() == null
                 ? helper.mAppComponent.application() : helper.mAppComponent.appManager().getCurrentActivity())

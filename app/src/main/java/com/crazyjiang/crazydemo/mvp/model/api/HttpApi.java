@@ -2,7 +2,9 @@ package com.crazyjiang.crazydemo.mvp.model.api;
 
 import com.crazyjiang.crazydemo.mvp.model.entity.GankEntity;
 import com.crazyjiang.crazydemo.mvp.model.entity.QueryResp;
-import com.crazyjiang.crazydemo.mvp.model.entity.Video;
+import com.crazyjiang.crazydemo.mvp.model.entity.RankLabelEntity;
+import com.crazyjiang.crazydemo.mvp.model.entity.RoomEntity;
+import com.crazyjiang.crazydemo.mvp.model.entity.VideoEntity;
 
 import java.util.List;
 
@@ -25,6 +27,9 @@ public interface HttpApi {
 
     // get video list
     @GET("userVideos/list")
-    Observable<QueryResp<List<Video>>> queryVideos(@Query("sort") String sort, @Query("userId") Integer userId, @Query("userType") Integer userType,
-                                                   @Query("start") int start, @Query("offset") int offset);
+    Observable<QueryResp<List<VideoEntity>>> queryVideos(@Query("sort") String sort, @Query("userId") Integer userId, @Query("userType") Integer userType,
+                                                         @Query("start") int start, @Query("offset") int offset);
+
+    @GET("rank/popular")
+    Observable<QueryResp<RankLabelEntity<RoomEntity>>> queryPopularTalents(@Query("start") int start, @Query("offset") int offset);
 }

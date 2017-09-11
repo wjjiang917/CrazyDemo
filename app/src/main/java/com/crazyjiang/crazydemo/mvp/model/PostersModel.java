@@ -2,29 +2,27 @@ package com.crazyjiang.crazydemo.mvp.model;
 
 import android.app.Application;
 
-import com.crazyjiang.crazydemo.mvp.contract.VideosContract;
+import com.crazyjiang.crazydemo.mvp.contract.PostersContract;
 import com.crazyjiang.crazydemo.mvp.model.api.HttpApi;
 import com.crazyjiang.crazydemo.mvp.model.entity.QueryResp;
-import com.crazyjiang.crazydemo.mvp.model.entity.VideoEntity;
+import com.crazyjiang.crazydemo.mvp.model.entity.RankLabelEntity;
+import com.crazyjiang.crazydemo.mvp.model.entity.RoomEntity;
 import com.google.gson.Gson;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-
 @ActivityScope
-public class VideosModel extends BaseModel implements VideosContract.Model {
+public class PostersModel extends BaseModel implements PostersContract.Model {
     private Gson mGson;
     private Application mApplication;
 
     @Inject
-    public VideosModel(IRepositoryManager repositoryManager, Gson gson, Application application) {
+    public PostersModel(IRepositoryManager repositoryManager, Gson gson, Application application) {
         super(repositoryManager);
         this.mGson = gson;
         this.mApplication = application;
@@ -38,7 +36,7 @@ public class VideosModel extends BaseModel implements VideosContract.Model {
     }
 
     @Override
-    public Observable<QueryResp<List<VideoEntity>>> getVideos(int start, int offset) {
-        return mRepositoryManager.obtainRetrofitService(HttpApi.class).queryVideos("likes", null, 1, start, offset);
+    public Observable<QueryResp<RankLabelEntity<RoomEntity>>> getPopularTalents(int start, int offset) {
+        return mRepositoryManager.obtainRetrofitService(HttpApi.class).queryPopularTalents(start, offset);
     }
 }

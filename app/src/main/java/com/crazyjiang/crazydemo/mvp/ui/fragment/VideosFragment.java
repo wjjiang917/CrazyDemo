@@ -18,7 +18,7 @@ import com.crazyjiang.crazydemo.app.base.BaseFragment;
 import com.crazyjiang.crazydemo.di.component.DaggerVideosComponent;
 import com.crazyjiang.crazydemo.di.module.VideosModule;
 import com.crazyjiang.crazydemo.mvp.contract.VideosContract;
-import com.crazyjiang.crazydemo.mvp.model.entity.Video;
+import com.crazyjiang.crazydemo.mvp.model.entity.VideoEntity;
 import com.crazyjiang.crazydemo.mvp.presenter.VideosPresenter;
 import com.crazyjiang.crazydemo.mvp.ui.adapter.VideosAdapter;
 import com.jess.arms.di.component.AppComponent;
@@ -92,6 +92,7 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
             loadMore = true;
             mPresenter.requestData(loadMore);
         }, mRecyclerView);
+        mAdapter.disableLoadMoreIfNotFullPage();
     }
 
     @Override
@@ -156,7 +157,21 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
     }
 
     @Override
-    public void onVideosLoaded(List<Video> mData) {
+    public void startLoadMore() {
+        mAdapter.setEnableLoadMore(true);
+    }
+
+    @Override
+    public void endLoadMore() {
+        mAdapter.loadMoreComplete();
+    }
+
+    @Override
+    public void onVideosLoaded(List<VideoEntity> mData) {
+        if (mData.size() < VideosPresenter.PAGE_SIZE) {
+            mAdapter.loadMoreEnd();  // 数据全部加载完毕
+        }
+
         if (loadMore) {
             mAdapter.addData(mData);
         } else {
