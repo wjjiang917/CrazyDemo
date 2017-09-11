@@ -8,11 +8,9 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
-import com.crazyjiang.crazydemo.mvp.model.entity.DaoGankEntity;
 import com.crazyjiang.crazydemo.mvp.model.entity.RoomEntity;
 import com.crazyjiang.crazydemo.mvp.model.entity.VideoEntity;
 
-import com.crazyjiang.crazydemo.app.greendao.DaoGankEntityDao;
 import com.crazyjiang.crazydemo.app.greendao.RoomEntityDao;
 import com.crazyjiang.crazydemo.app.greendao.VideoEntityDao;
 
@@ -25,11 +23,9 @@ import com.crazyjiang.crazydemo.app.greendao.VideoEntityDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private final DaoConfig daoGankEntityDaoConfig;
     private final DaoConfig roomEntityDaoConfig;
     private final DaoConfig videoEntityDaoConfig;
 
-    private final DaoGankEntityDao daoGankEntityDao;
     private final RoomEntityDao roomEntityDao;
     private final VideoEntityDao videoEntityDao;
 
@@ -37,32 +33,22 @@ public class DaoSession extends AbstractDaoSession {
             daoConfigMap) {
         super(db);
 
-        daoGankEntityDaoConfig = daoConfigMap.get(DaoGankEntityDao.class).clone();
-        daoGankEntityDaoConfig.initIdentityScope(type);
-
         roomEntityDaoConfig = daoConfigMap.get(RoomEntityDao.class).clone();
         roomEntityDaoConfig.initIdentityScope(type);
 
         videoEntityDaoConfig = daoConfigMap.get(VideoEntityDao.class).clone();
         videoEntityDaoConfig.initIdentityScope(type);
 
-        daoGankEntityDao = new DaoGankEntityDao(daoGankEntityDaoConfig, this);
         roomEntityDao = new RoomEntityDao(roomEntityDaoConfig, this);
         videoEntityDao = new VideoEntityDao(videoEntityDaoConfig, this);
 
-        registerDao(DaoGankEntity.class, daoGankEntityDao);
         registerDao(RoomEntity.class, roomEntityDao);
         registerDao(VideoEntity.class, videoEntityDao);
     }
     
     public void clear() {
-        daoGankEntityDaoConfig.clearIdentityScope();
         roomEntityDaoConfig.clearIdentityScope();
         videoEntityDaoConfig.clearIdentityScope();
-    }
-
-    public DaoGankEntityDao getDaoGankEntityDao() {
-        return daoGankEntityDao;
     }
 
     public RoomEntityDao getRoomEntityDao() {
