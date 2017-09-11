@@ -23,9 +23,6 @@ import com.crazyjiang.crazydemo.mvp.presenter.VideosPresenter;
 import com.crazyjiang.crazydemo.mvp.ui.adapter.VideosAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-import com.paginate.Paginate;
-
-import org.simple.eventbus.Subscriber;
 
 import java.util.List;
 
@@ -43,8 +40,7 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     private VideosAdapter mAdapter;
-    private boolean isLoadingMore;
-    private Paginate mPaginate;
+    private boolean loadMore = false;
 
     public static VideosFragment newInstance() {
         return new VideosFragment();
@@ -72,12 +68,7 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
 
         ArmsUtils.configRecycleView(mRecyclerView, layoutManager);
-
         mAdapter = new VideosAdapter(null);
-        mAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
-        mAdapter.setOnItemClickListener((adapter, view, position) -> {
-
-        });
 
         TextView textView = new TextView(getContext());
         textView.setText("No More Data.");
@@ -93,50 +84,21 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
             }
         });
 
-        if (null == mPaginate) {
-            Paginate.Callbacks callbacks = new Paginate.Callbacks() {
-                @Override
-                public void onLoadMore() {
-                    mPresenter.requestData(false);
-                }
+        mAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
 
-                @Override
-                public boolean isLoading() {
-                    return isLoadingMore;
-                }
-
-                @Override
-                public boolean hasLoadedAllItems() {
-                    return false;
-                }
-            };
-
-            mPaginate = Paginate.with(mRecyclerView, callbacks)
-                    .setLoadingTriggerThreshold(0)
-                    .build();
-            mPaginate.setHasMoreDataToLoad(false);
-        }
+        });
+        mAdapter.setOnLoadMoreListener(() -> {
+            loadMore = true;
+            mPresenter.requestData(loadMore);
+        }, mRecyclerView);
     }
 
     @Override
     protected void onFragmentFirstVisible() {
         //去服务器下载数据
-        mPresenter.requestData(true);
-    }
-
-    @Override
-    public void startLoadMore() {
-        isLoadingMore = true;
-    }
-
-    @Override
-    public void endLoadMore() {
-        isLoadingMore = false;
-    }
-
-    @Subscriber(tag = "meizi")
-    private void updateAdapter(Object o) {
-        mPresenter.requestData(true);
+        loadMore = false;
+        mPresenter.requestData(loadMore);
     }
 
     /**
@@ -189,22 +151,20 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
 
     @Override
     public void onRefresh() {
-        mPresenter.requestData(true);
+        loadMore = false;
+        mPresenter.requestData(loadMore);
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.mPaginate = null;
-    }
+    public void onVideosLoaded(List<Video> mData) {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
 
-    @Override
-    public void setNewData(List<Video> mData) {
-        mAdapter.setNewData(mData);
-    }
-
-    @Override
-    public void setAddData(List<Video> results) {
-        mAdapter.addData(results);
+        if (loadMore) {
+            mAdapter.addData(mData);
+        } else {
+            mAdapter.setNewData(mData);
+        }
     }
 }

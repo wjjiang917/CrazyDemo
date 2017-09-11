@@ -38,7 +38,7 @@ public class VideosModel extends BaseModel implements VideosContract.Model {
     }
 
     @Override
-    public Observable<QueryResp<List<Video>>> getEntity(int start, int offset) {
+    public Observable<QueryResp<List<Video>>> getVideos(int start, int offset) {
         return mRepositoryManager.obtainRetrofitService(HttpApi.class).queryVideos("likes", null, 1, start, offset);
     }
 }
