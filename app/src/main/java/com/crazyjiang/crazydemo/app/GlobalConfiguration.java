@@ -24,6 +24,7 @@ import com.squareup.leakcanary.RefWatcher;
 
 import java.util.List;
 
+import io.rong.imkit.RongIM;
 import timber.log.Timber;
 
 /**
@@ -68,6 +69,9 @@ public class GlobalConfiguration implements ConfigModule {
                 }
                 ARouter.init(application); // 尽可能早，推荐在Application中初始化
                 GreenDaoHelper.initDatabase(application);
+
+                // RongCloud IM
+                RongIM.init(application);
             }
 
             @Override

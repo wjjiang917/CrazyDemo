@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/Users/Jiangwenjin/StudioProjects/CrazyDemo/IMLib/src/main/assets"/><source path="/Users/Jiangwenjin/StudioProjects/CrazyDemo/IMLib/build/generated/assets/shaders/debug"/></dataSet><dataSet config="debug"><source path="/Users/Jiangwenjin/StudioProjects/CrazyDemo/IMLib/src/debug/assets"/></dataSet></merger>

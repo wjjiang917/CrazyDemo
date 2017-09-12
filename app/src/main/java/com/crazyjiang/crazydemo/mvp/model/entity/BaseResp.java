@@ -25,6 +25,10 @@ public class BaseResp implements Serializable {
         this.returnMsg = returnMsg;
     }
 
+    public boolean isSuccess() {
+        return "000000".equals(returnCode);
+    }
+
     @Override
     public String toString() {
         return "BaseResp{" +

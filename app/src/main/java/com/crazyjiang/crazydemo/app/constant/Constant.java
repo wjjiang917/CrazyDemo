@@ -8,8 +8,9 @@ public interface Constant {
     // http
     String SERVER_IP = "http://www.streamkar.com/";
 
-    // return code
-    String SUCCESS_CODE = "0";
+    // SharePreference
+    String NAME_SP = "name_sp";
+    String KEY_TOKEN = "key_token";
 
     // GreenDao
     String DB_NAME = "social_db";
