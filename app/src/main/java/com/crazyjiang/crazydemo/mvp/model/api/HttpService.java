@@ -14,7 +14,7 @@ import retrofit2.http.Query;
 /**
  * 存放通用的一些API
  */
-public interface HttpApi {
+public interface HttpService {
     // get video list
     @GET("userVideos/list")
     Observable<QueryResp<List<VideoEntity>>> queryVideos(@Query("sort") String sort, @Query("userId") Integer userId, @Query("userType") Integer userType,

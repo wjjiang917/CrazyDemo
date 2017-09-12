@@ -3,7 +3,7 @@ package com.crazyjiang.crazydemo.mvp.model;
 import android.app.Application;
 
 import com.crazyjiang.crazydemo.mvp.contract.PostersContract;
-import com.crazyjiang.crazydemo.mvp.model.api.HttpApi;
+import com.crazyjiang.crazydemo.mvp.model.api.HttpService;
 import com.crazyjiang.crazydemo.mvp.model.entity.QueryResp;
 import com.crazyjiang.crazydemo.mvp.model.entity.RankLabelEntity;
 import com.crazyjiang.crazydemo.mvp.model.entity.RoomEntity;
@@ -37,6 +37,6 @@ public class PostersModel extends BaseModel implements PostersContract.Model {
 
     @Override
     public Observable<QueryResp<RankLabelEntity<RoomEntity>>> getPopularTalents(int start, int offset) {
-        return mRepositoryManager.obtainRetrofitService(HttpApi.class).queryPopularTalents(start, offset);
+        return mRepositoryManager.obtainRetrofitService(HttpService.class).queryPopularTalents(start, offset);
     }
 }
