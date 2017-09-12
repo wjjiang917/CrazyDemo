@@ -44,6 +44,17 @@
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
 
+
+#### tencent IM
+-keep class com.tencent.**{*;}
+-dontwarn com.tencent.**
+
+-keep class tencent.**{*;}
+-dontwarn tencent.**
+
+-keep class qalsdk.**{*;}
+-dontwarn qalsdk.**
+
 ################BaseRecyclerViewAdapterHelper###############
 -keep class com.chad.library.adapter.** {
 *;

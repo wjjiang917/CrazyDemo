@@ -59,6 +59,8 @@ android {
         daoPackage 'com.crazyjiang.crazydemo.app.greendao'//设置DaoMaster、DaoSession、Dao包名
         targetGenDir 'src/main/java'
     }
+
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
@@ -68,6 +70,7 @@ dependencies {
         exclude module: 'jsr305'
     })
     //support
+    compile rootProject.ext.dependencies["support-v4"]
     compile(rootProject.ext.dependencies["cardview-v7"]) {
         exclude module: 'support-annotations'
     }
@@ -96,4 +99,6 @@ dependencies {
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
     compile 'org.greenrobot:greendao:3.2.2' // greenDao
     compile 'me.yuqirong:cardswipelayout:1.0.0'//仿探探
+
+    compile project(':sample')
 }
