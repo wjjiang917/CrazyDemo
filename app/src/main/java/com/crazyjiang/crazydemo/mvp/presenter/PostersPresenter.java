@@ -2,7 +2,6 @@ package com.crazyjiang.crazydemo.mvp.presenter;
 
 import android.app.Application;
 
-import com.crazyjiang.crazydemo.app.utils.RxUtils;
 import com.crazyjiang.crazydemo.mvp.contract.PostersContract;
 import com.crazyjiang.crazydemo.mvp.model.entity.QueryResp;
 import com.crazyjiang.crazydemo.mvp.model.entity.RankLabelEntity;
@@ -11,6 +10,7 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.RxLifecycleUtils;
 
 import javax.inject.Inject;
 
@@ -55,9 +55,9 @@ public class PostersPresenter extends BasePresenter<PostersContract.Model, Poste
                 })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doAfterTerminate(() -> {
+                .doFinally(() -> {
                 })
-                .compose(RxUtils.bindToLifecycle(mRootView))//使用Rxlifecycle,使Disposable和Activity一起销毁
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用Rxlifecycle,使Disposable和Activity一起销毁
                 .subscribe(new ErrorHandleSubscriber<QueryResp<RankLabelEntity<RoomEntity>>>(mErrorHandler) {
                     @Override
                     public void onNext(QueryResp<RankLabelEntity<RoomEntity>> rankLabelEntityQueryResp) {
