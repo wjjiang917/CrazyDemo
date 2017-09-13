@@ -121,6 +121,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         }
         FragmentUtils.addFragments(getSupportFragmentManager(), mFragments, R.id.main_frame, 0);
         mBottomBar.setOnTabSelectListener(mOnTabSelectListener);
+
+        // init tencent im
+
     }
 
     @Override

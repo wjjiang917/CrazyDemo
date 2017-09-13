@@ -21,6 +21,9 @@ import com.jess.arms.integration.ConfigModule;
 import com.jess.arms.utils.ArmsUtils;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+import com.tencent.imsdk.TIMGroupReceiveMessageOpt;
+import com.tencent.imsdk.TIMManager;
+import com.tencent.qalsdk.sdk.MsfSdkUtils;
 
 import java.util.List;
 
@@ -68,6 +71,17 @@ public class GlobalConfiguration implements ConfigModule {
                 }
                 ARouter.init(application); // 尽可能早，推荐在Application中初始化
                 GreenDaoHelper.initDatabase(application);
+
+
+                // tencent IM
+                if (MsfSdkUtils.isMainProcess(application)) {
+                    TIMManager.getInstance().setOfflinePushListener(notification -> {
+                        if (notification.getGroupReceiveMsgOpt() == TIMGroupReceiveMessageOpt.ReceiveAndNotify) {
+                            //消息被设置为需要提醒
+                            notification.doNotify(application, R.mipmap.ic_launcher);
+                        }
+                    });
+                }
             }
 
             @Override
