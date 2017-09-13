@@ -10,6 +10,7 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.PermissionUtil;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class VideosPresenter extends BasePresenter<VideosContract.Model, VideosC
     private AppManager mAppManager;
 
     private int currentPage = 1;
+    private boolean isFirst = true;
 
     @Inject
     public VideosPresenter(VideosContract.Model model, VideosContract.View rootView,
@@ -53,16 +55,22 @@ public class VideosPresenter extends BasePresenter<VideosContract.Model, VideosC
     }
 
     public void requestData(boolean loadMore) {
+        //关于RxCache缓存库的使用请参考 http://www.jianshu.com/p/b58ef6b0624b
+        boolean isEvictCache = !loadMore; //是否驱逐缓存,为ture即不使用缓存,每次下拉刷新即需要最新数据,则不使用缓存
+        if (!loadMore && isFirst) {//默认在第一次下拉刷新时使用缓存
+            isFirst = false;
+            isEvictCache = false;
+        }
+
         int start = 0;
         if (loadMore) {
             currentPage++;
-
             start = (currentPage - 1) * PAGE_SIZE;
         } else {
             currentPage = 1;
         }
 
-        mModel.getVideos(start, PAGE_SIZE)
+        mModel.getVideos(start, PAGE_SIZE, isEvictCache)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))
                 .doOnSubscribe(disposable -> {

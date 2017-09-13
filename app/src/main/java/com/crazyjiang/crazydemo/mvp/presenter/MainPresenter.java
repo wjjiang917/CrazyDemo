@@ -32,7 +32,7 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
     }
 
     public void requestPermissions() {
-        PermissionUtil.requestPermission(new PermissionUtil.RequestPermission() {
+        PermissionUtil.externalStorage(new PermissionUtil.RequestPermission() {
             @Override
             public void onRequestPermissionSuccess() {
                 //request permission success, do something.

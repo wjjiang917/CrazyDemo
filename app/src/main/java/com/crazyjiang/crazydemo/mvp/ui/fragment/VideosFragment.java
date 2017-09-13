@@ -90,7 +90,7 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
         });
         mAdapter.setOnLoadMoreListener(() -> {
             loadMore = true;
-            mPresenter.requestData(loadMore);
+            mPresenter.requestData(true);
         }, mRecyclerView);
         mAdapter.disableLoadMoreIfNotFullPage();
     }
@@ -99,7 +99,7 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
     protected void onFragmentFirstVisible() {
         //去服务器下载数据
         loadMore = false;
-        mPresenter.requestData(loadMore);
+        mPresenter.requestData(false);
     }
 
     /**
@@ -153,7 +153,7 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
     @Override
     public void onRefresh() {
         loadMore = false;
-        mPresenter.requestData(loadMore);
+        mPresenter.requestData(false);
     }
 
     @Override

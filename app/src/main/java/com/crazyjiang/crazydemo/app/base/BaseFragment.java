@@ -1,33 +1,46 @@
 package com.crazyjiang.crazydemo.app.base;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.jess.arms.base.delegate.IFragment;
+import com.jess.arms.integration.lifecycle.FragmentLifecycleable;
 import com.jess.arms.mvp.IPresenter;
-import com.trello.rxlifecycle2.components.support.RxFragment;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import javax.inject.Inject;
+
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.Subject;
 
 /**
  * Created by Administrator on 2017/7/12.
  */
 
-public abstract class BaseFragment<P extends IPresenter> extends RxFragment implements IFragment {
+public abstract class BaseFragment<P extends IPresenter> extends Fragment implements IFragment, FragmentLifecycleable {
     @Inject
     protected P mPresenter;
 
     private boolean isFragmentVisible;
     private boolean isReuseView;
-    private boolean isFirstVisible;
+    volatile private boolean isFirstVisible;
     private View rootView;
+
+    private final BehaviorSubject<FragmentEvent> mLifecycleSubject = BehaviorSubject.create();
 
     public BaseFragment() {
         //必须确保在Fragment实例化时setArguments()
         setArguments(new Bundle());
+    }
+
+    @NonNull
+    public final Subject<FragmentEvent> provideLifecycleSubject() {
+        return this.mLifecycleSubject;
     }
 
     @Nullable
@@ -35,7 +48,6 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return initView(inflater, container, savedInstanceState);
     }
-
 
     @Override
     public void onDestroy() {

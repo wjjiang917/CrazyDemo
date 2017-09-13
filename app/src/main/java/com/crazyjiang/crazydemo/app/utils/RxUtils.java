@@ -1,11 +1,9 @@
 package com.crazyjiang.crazydemo.app.utils;
 
 import com.jess.arms.mvp.IView;
+import com.jess.arms.utils.RxLifecycleUtils;
 import com.trello.rxlifecycle2.LifecycleTransformer;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
-import com.trello.rxlifecycle2.components.support.RxFragment;
 
-import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -15,27 +13,35 @@ import io.reactivex.schedulers.Schedulers;
  * Contact with jess.yan.effort@gmail.com
  */
 public class RxUtils {
+
+    private RxUtils() {
+
+    }
+
     public static <T> ObservableTransformer<T, T> applySchedulers(final IView view) {
         return observable -> observable.subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
-                    //显示进度条
-                    view.showLoading();
+                    view.showLoading();//显示进度条
                 })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                //隐藏进度条
-                .doAfterTerminate(view::hideLoading)
-                .compose(RxUtils.bindToLifecycle(view));
+                .doFinally(() -> {
+                    view.hideLoading();//隐藏进度条
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(view));
     }
 
-
+    /**
+     * 此接口已废弃
+     *
+     * @param view
+     * @param <T>
+     * @return
+     * @see RxLifecycleUtils 使用此类代替
+     */
+    @Deprecated
     public static <T> LifecycleTransformer<T> bindToLifecycle(IView view) {
-        if (view instanceof RxAppCompatActivity) {
-            return ((RxAppCompatActivity) view).bindToLifecycle();
-        } else if (view instanceof RxFragment) {
-            return ((RxFragment) view).bindToLifecycle();
-        } else {
-            throw new IllegalArgumentException("view isn't activity or fragment");
-        }
+        return RxLifecycleUtils.bindToLifecycle(view);
     }
+
 }
