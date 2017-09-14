@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">library</string>
+
+    <string name="header_pull">Pull to Refresh</string>
+    <string name="header_pull_over">Release to Refresh</string>
+    <string name="header_refreshing">Refreshing...</string>
+    <string name="header_completed">Refresh Complete</string>
+
+    <string name="footer_loading">Loading...</string>
+    <string name="footer_load_complete">Load Complete</string>
+    <string name="footer_load_fail">Load Failed. Click to Reload</string>
+    <string name="footer_load_end">No More</string>
 </resources>

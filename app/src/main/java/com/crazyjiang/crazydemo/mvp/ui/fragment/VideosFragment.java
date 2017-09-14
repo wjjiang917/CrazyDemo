@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ajguan.library.EasyRefreshLayout;
-import com.ajguan.library.LoadModel;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.crazyjiang.crazydemo.R;
 import com.crazyjiang.crazydemo.app.base.BaseFragment;
@@ -24,6 +22,8 @@ import com.crazyjiang.crazydemo.mvp.model.entity.VideoEntity;
 import com.crazyjiang.crazydemo.mvp.presenter.VideosPresenter;
 import com.crazyjiang.crazydemo.mvp.ui.adapter.VideosAdapter;
 import com.crazyjiang.crazydemo.mvp.ui.widget.RefreshHeaderView;
+import com.crazyjiang.library.easyrefreshlayout.EasyRefreshLayout;
+import com.crazyjiang.library.easyrefreshlayout.LoadModel;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 

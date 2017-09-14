@@ -1,4 +1,4 @@
-package com.crazyjiang.crazydemo.mvp.ui.widget;
+package com.crazyjiang.library.easyrefreshlayout.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,15 +9,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.crazyjiang.crazydemo.R;
+import com.crazyjiang.library.R;
 import com.crazyjiang.library.easyrefreshlayout.IRefreshHeader;
 import com.crazyjiang.library.easyrefreshlayout.State;
 
-/**
- * Created by Jiangwenjin on 2017/9/14.
- */
-
-public class RefreshHeaderView extends FrameLayout implements IRefreshHeader {
+public class SimpleRefreshHeaderView extends FrameLayout implements IRefreshHeader {
     private Animation rotate_up;
     private Animation rotate_down;
     private Animation rotate_infinite;
@@ -26,11 +22,11 @@ public class RefreshHeaderView extends FrameLayout implements IRefreshHeader {
     private View successIcon;
     private View loadingIcon;
 
-    public RefreshHeaderView(Context context) {
+    public SimpleRefreshHeaderView(Context context) {
         this(context, null);
     }
 
-    public RefreshHeaderView(Context context, AttributeSet attrs) {
+    public SimpleRefreshHeaderView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         // 初始化动画
@@ -38,7 +34,7 @@ public class RefreshHeaderView extends FrameLayout implements IRefreshHeader {
         rotate_down = AnimationUtils.loadAnimation(context, R.anim.rotate_down);
         rotate_infinite = AnimationUtils.loadAnimation(context, R.anim.rotate_infinite);
 
-        inflate(context, R.layout.refresh_header, this);
+        inflate(context, R.layout.default_refresh_header, this);
 
         textView = (TextView) findViewById(R.id.text);
         arrowIcon = findViewById(R.id.arrowIcon);
