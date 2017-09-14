@@ -3,7 +3,6 @@ package com.crazyjiang.crazydemo.mvp.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Gravity;
@@ -12,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.ajguan.library.EasyRefreshLayout;
+import com.ajguan.library.LoadModel;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.crazyjiang.crazydemo.R;
 import com.crazyjiang.crazydemo.app.base.BaseFragment;
@@ -22,23 +23,22 @@ import com.crazyjiang.crazydemo.mvp.contract.VideosContract;
 import com.crazyjiang.crazydemo.mvp.model.entity.VideoEntity;
 import com.crazyjiang.crazydemo.mvp.presenter.VideosPresenter;
 import com.crazyjiang.crazydemo.mvp.ui.adapter.VideosAdapter;
+import com.crazyjiang.crazydemo.mvp.ui.widget.RefreshHeaderView;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
 import java.util.List;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static com.crazyjiang.crazydemo.R.id.recyclerView;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-public class VideosFragment extends BaseFragment<VideosPresenter> implements VideosContract.View, SwipeRefreshLayout.OnRefreshListener {
+public class VideosFragment extends BaseFragment<VideosPresenter> implements VideosContract.View {
     @BindView(recyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.refreshLayout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    EasyRefreshLayout mRefreshLayout;
 
     private VideosAdapter mAdapter;
     private boolean loadMore = false;
@@ -64,7 +64,6 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        mSwipeRefreshLayout.setOnRefreshListener(this);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
 
@@ -89,11 +88,26 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
 
         });
-        mAdapter.setOnLoadMoreListener(() -> {
-            loadMore = true;
-            mPresenter.requestData(true);
-        }, mRecyclerView);
-        mAdapter.disableLoadMoreIfNotFullPage();
+//        mAdapter.setOnLoadMoreListener(() -> {
+//            loadMore = true;
+//            mPresenter.requestData(true);
+//        }, mRecyclerView);
+//        mAdapter.disableLoadMoreIfNotFullPage();
+
+        mRefreshLayout.setRefreshHeadView(new RefreshHeaderView(getContext()));
+        mRefreshLayout.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
+            @Override
+            public void onLoadMore() {
+                loadMore = true;
+                mPresenter.requestData(true);
+            }
+
+            @Override
+            public void onRefreshing() {
+                loadMore = false;
+                mPresenter.requestData(false);
+            }
+        });
     }
 
     @Override
@@ -121,20 +135,6 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
     }
 
     @Override
-    public void showLoading() {
-        Observable.just(1)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(integer -> mSwipeRefreshLayout.setRefreshing(true));
-    }
-
-    @Override
-    public void hideLoading() {
-        Observable.just(1)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(integer -> mSwipeRefreshLayout.setRefreshing(false));
-    }
-
-    @Override
     public void showMessage(@NonNull String message) {
         checkNotNull(message);
         ArmsUtils.snackbarText(message);
@@ -152,25 +152,36 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
     }
 
     @Override
-    public void onRefresh() {
-        loadMore = false;
-        mPresenter.requestData(false);
-    }
-
-    @Override
     public void startLoadMore() {
-        mAdapter.setEnableLoadMore(true);
+        //mAdapter.setEnableLoadMore(true);
     }
 
     @Override
     public void endLoadMore() {
-        mAdapter.loadMoreComplete();
+        mRefreshLayout.closeLoadView();
+    }
+
+    @Override
+    public void showLoading() {
+//        Observable.just(1)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(integer -> mSwipeRefreshLayout.setRefreshing(true));
+    }
+
+    @Override
+    public void hideLoading() {
+        mRefreshLayout.refreshComplete();
+//        Observable.just(1)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(integer -> mSwipeRefreshLayout.setRefreshing(false));
     }
 
     @Override
     public void onVideosLoaded(List<VideoEntity> mData) {
         if (mData.size() < VideosPresenter.PAGE_SIZE) {
-            mAdapter.loadMoreEnd();  // 数据全部加载完毕
+            // mAdapter.loadMoreEnd();  // 数据全部加载完毕
+
+            mRefreshLayout.setLoadMoreModel(LoadModel.NONE);
         }
 
         if (loadMore) {

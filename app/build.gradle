@@ -24,7 +24,7 @@ android {
         // ARouter
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [ moduleName : project.getName() ]
+                arguments = [moduleName: project.getName()]
             }
         }
 
@@ -71,30 +71,16 @@ dependencies {
     compile(rootProject.ext.dependencies["cardview-v7"]) {
         exclude module: 'support-annotations'
     }
-    //tools
-    // provided rootProject.ext.dependencies["javax.annotation"]
-    annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
-    compile rootProject.ext.dependencies["progressmanager"]
-    compile rootProject.ext.dependencies["retrofit-url-manager"]
-    //view
+
+    //test
+    testCompile rootProject.ext.dependencies["junit"]
+
     annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {
         exclude module: 'support-annotations'
         exclude module: 'butterknife-annotations'
     }
-    compile rootProject.ext.dependencies["paginate"]
-    //test
-    testCompile rootProject.ext.dependencies["junit"]
-    debugCompile rootProject.ext.dependencies["canary-debug"]
-    releaseCompile rootProject.ext.dependencies["canary-release"]
-    testCompile rootProject.ext.dependencies["canary-release"]
-
-    compile rootProject.ext.dependencies["androideventbus"]//eventbus
-    compile rootProject.ext.dependencies["arouter"]
     annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+    annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
 
-    compile 'com.roughike:bottom-bar:2.3.1' //底部导航
-    compile 'me.jessyan:arms:2.2.3' //使用Rxjava2
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
-    compile 'org.greenrobot:greendao:3.2.2' // greenDao
-    compile 'me.yuqirong:cardswipelayout:1.0.0'//仿探探
+    compile project(':library')
 }

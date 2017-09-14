@@ -73,10 +73,10 @@ public class VideosPresenter extends BasePresenter<VideosContract.Model, VideosC
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))
                 .doOnSubscribe(disposable -> {
-                    if (!loadMore)
-                        mRootView.showLoading();//显示上拉刷新的进度条
-                    else
-                        mRootView.startLoadMore();//显示下拉加载更多的进度条
+//                    if (!loadMore)
+//                        mRootView.showLoading();//显示上拉刷新的进度条
+//                    else
+//                        mRootView.startLoadMore();//显示下拉加载更多的进度条
                 })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
