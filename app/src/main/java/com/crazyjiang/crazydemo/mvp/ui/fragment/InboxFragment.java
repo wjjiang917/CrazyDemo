@@ -7,16 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.utils.ArmsUtils;
-
+import com.crazyjiang.crazydemo.R;
 import com.crazyjiang.crazydemo.app.base.BaseFragment;
 import com.crazyjiang.crazydemo.di.component.DaggerInboxComponent;
 import com.crazyjiang.crazydemo.di.module.InboxModule;
 import com.crazyjiang.crazydemo.mvp.contract.InboxContract;
 import com.crazyjiang.crazydemo.mvp.presenter.InboxPresenter;
-
-import com.crazyjiang.crazydemo.R;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -92,5 +90,10 @@ public class InboxFragment extends BaseFragment<InboxPresenter> implements Inbox
     @Override
     public void killMyself() {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

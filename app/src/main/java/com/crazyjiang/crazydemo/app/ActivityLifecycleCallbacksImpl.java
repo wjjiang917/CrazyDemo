@@ -56,7 +56,7 @@ public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifec
                     ((AppCompatActivity) activity).getSupportActionBar().setDisplayShowTitleEnabled(false);
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        activity.setActionBar((android.widget.Toolbar) activity.findViewById(R.id.toolbar));
+                        activity.setActionBar(activity.findViewById(R.id.toolbar));
                         activity.getActionBar().setDisplayShowTitleEnabled(false);
                     }
                 }

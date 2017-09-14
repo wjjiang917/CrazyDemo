@@ -34,7 +34,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/iv_video_image"
+                android:id="@+id/iv_video_poster"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"

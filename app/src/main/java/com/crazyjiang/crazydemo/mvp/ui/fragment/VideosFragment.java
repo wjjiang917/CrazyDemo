@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.crazyjiang.crazydemo.R;
 import com.crazyjiang.crazydemo.app.base.BaseFragment;
+import com.crazyjiang.crazydemo.app.base.BaseHolder;
 import com.crazyjiang.crazydemo.di.component.DaggerVideosComponent;
 import com.crazyjiang.crazydemo.di.module.VideosModule;
 import com.crazyjiang.crazydemo.mvp.contract.VideosContract;
@@ -177,5 +178,11 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
         } else {
             mAdapter.setNewData(mData);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        BaseHolder.releaseHolders(mRecyclerView);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
     }
 }

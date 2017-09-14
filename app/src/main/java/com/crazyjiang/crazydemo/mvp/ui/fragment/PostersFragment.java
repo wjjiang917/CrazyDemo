@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.crazyjiang.crazydemo.R;
 import com.crazyjiang.crazydemo.app.base.BaseFragment;
+import com.crazyjiang.crazydemo.app.base.BaseHolder;
 import com.crazyjiang.crazydemo.di.component.DaggerPostersComponent;
 import com.crazyjiang.crazydemo.di.module.PostersModule;
 import com.crazyjiang.crazydemo.mvp.contract.PostersContract;
@@ -154,5 +155,11 @@ public class PostersFragment extends BaseFragment<PostersPresenter> implements P
         touchHelper.attachToRecyclerView(mRecyclerView);
 
         mAdapter.setNewData(rooms.getRank());
+    }
+
+    @Override
+    public void onDestroy() {
+        BaseHolder.releaseHolders(mRecyclerView);//super.onDestroy()之后会unbind,所有view被置为null,所以必须在之前调用
+        super.onDestroy();
     }
 }
