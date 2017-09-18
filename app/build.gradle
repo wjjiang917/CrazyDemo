@@ -96,12 +96,13 @@ dependencies {
 
     compile 'com.roughike:bottom-bar:2.3.1' //底部导航
     compile('me.jessyan:arms:2.2.0') {
-        exclude group: 'com.github.bumptech.glide'
-        exclude group: 'com.squareup.okhttp3'
     }
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
     compile 'org.greenrobot:greendao:3.2.2' // greenDao
     compile 'me.yuqirong:cardswipelayout:1.0.0'//仿探探
 
-    compile project(':sample')
+    compile(project(':sample')) {
+        exclude group: 'com.github.bumptech.glide'
+        exclude group: 'com.squareup.okhttp3'
+    }
 }
