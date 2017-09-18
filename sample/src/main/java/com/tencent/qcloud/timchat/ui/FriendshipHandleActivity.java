@@ -35,39 +35,39 @@ public class FriendshipHandleActivity extends Activity implements View.OnClickLi
      */
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btnReject:
-                FriendshipManagerPresenter.refuseFriendRequest(id, new TIMValueCallBack<TIMFriendResult>() {
-                    @Override
-                    public void onError(int i, String s) {
-                        Toast.makeText(FriendshipHandleActivity.this, getString(R.string.operate_fail), Toast.LENGTH_SHORT).show();
-                    }
+        int i = v.getId();
+        if (i == R.id.btnReject) {
+            FriendshipManagerPresenter.refuseFriendRequest(id, new TIMValueCallBack<TIMFriendResult>() {
+                @Override
+                public void onError(int i, String s) {
+                    Toast.makeText(FriendshipHandleActivity.this, getString(R.string.operate_fail), Toast.LENGTH_SHORT).show();
+                }
 
-                    @Override
-                    public void onSuccess(TIMFriendResult timFriendResult) {
-                        Intent intent = new Intent();
-                        intent.putExtra("operate", false);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-                });
-                break;
-            case R.id.btnAgree:
-                FriendshipManagerPresenter.acceptFriendRequest(id, new TIMValueCallBack<TIMFriendResult>() {
-                    @Override
-                    public void onError(int i, String s) {
-                        Toast.makeText(FriendshipHandleActivity.this, getString(R.string.operate_fail), Toast.LENGTH_SHORT).show();
-                    }
+                @Override
+                public void onSuccess(TIMFriendResult timFriendResult) {
+                    Intent intent = new Intent();
+                    intent.putExtra("operate", false);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
 
-                    @Override
-                    public void onSuccess(TIMFriendResult timFriendResult) {
-                        Intent intent = new Intent();
-                        intent.putExtra("operate", true);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-                });
-                break;
+        } else if (i == R.id.btnAgree) {
+            FriendshipManagerPresenter.acceptFriendRequest(id, new TIMValueCallBack<TIMFriendResult>() {
+                @Override
+                public void onError(int i, String s) {
+                    Toast.makeText(FriendshipHandleActivity.this, getString(R.string.operate_fail), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onSuccess(TIMFriendResult timFriendResult) {
+                    Intent intent = new Intent();
+                    intent.putExtra("operate", true);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
+
         }
     }
 }

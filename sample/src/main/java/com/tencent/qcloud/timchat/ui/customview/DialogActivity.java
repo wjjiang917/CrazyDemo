@@ -40,32 +40,32 @@ public class DialogActivity extends Activity implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btnOk:
-                LoginBusiness.loginIm(UserInfo.getInstance().getId(), UserInfo.getInstance().getUserSig(), new TIMCallBack() {
-                    @Override
-                    public void onError(int i, String s) {
-                        Toast.makeText(DialogActivity.this, getString(R.string.login_error), Toast.LENGTH_SHORT).show();
-                        logout();
-                    }
+        int i = v.getId();
+        if (i == R.id.btnOk) {
+            LoginBusiness.loginIm(UserInfo.getInstance().getId(), UserInfo.getInstance().getUserSig(), new TIMCallBack() {
+                @Override
+                public void onError(int i, String s) {
+                    Toast.makeText(DialogActivity.this, getString(R.string.login_error), Toast.LENGTH_SHORT).show();
+                    logout();
+                }
 
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(DialogActivity.this, getString(R.string.login_succ), Toast.LENGTH_SHORT).show();
-                        String deviceMan = android.os.Build.MANUFACTURER;
-                        //注册小米和华为推送
-                        if (deviceMan.equals("Xiaomi") && shouldMiInit()){
-                            MiPushClient.registerPush(getApplicationContext(), "2882303761517480335", "5411748055335");
-                        }else if (deviceMan.equals("HUAWEI")){
-                            PushManager.requestToken(getApplicationContext());
-                        }
-                        finish();
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(DialogActivity.this, getString(R.string.login_succ), Toast.LENGTH_SHORT).show();
+                    String deviceMan = android.os.Build.MANUFACTURER;
+                    //注册小米和华为推送
+                    if (deviceMan.equals("Xiaomi") && shouldMiInit()) {
+                        MiPushClient.registerPush(getApplicationContext(), "2882303761517480335", "5411748055335");
+                    } else if (deviceMan.equals("HUAWEI")) {
+                        PushManager.requestToken(getApplicationContext());
                     }
-                });
-                break;
-            case R.id.btnCancel:
-                logout();
-                break;
+                    finish();
+                }
+            });
+
+        } else if (i == R.id.btnCancel) {
+            logout();
+
         }
     }
 

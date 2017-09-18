@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -18,42 +17,42 @@ import android.widget.Toast;
 import com.tencent.qcloud.timchat.R;
 import com.tencent.qcloud.timchat.ui.customview.BeautyDialogFragment;
 import com.tencent.qcloud.timchat.utils.TCUtils;
-import com.tencent.rtmp.ugc.TXUGCRecord;
 import com.tencent.rtmp.ugc.TXRecordCommon;
+import com.tencent.rtmp.ugc.TXUGCRecord;
 import com.tencent.rtmp.ui.TXCloudVideoView;
+
 import java.util.Locale;
 
 /**
  * UGC主播端录制界面
  */
 public class TCVideoRecordActivity extends Activity implements View.OnClickListener, BeautyDialogFragment.OnBeautyParamsChangeListener
-                                                            ,TXRecordCommon.ITXVideoRecordListener
-{
+        , TXRecordCommon.ITXVideoRecordListener {
 
     private BeautyDialogFragment mBeautyDialogFragment;
 
-    public static final String VIDEO_RECORD_TYPE        = "type";
-    public static final String VIDEO_RECORD_RESULT      = "result";
-    public static final String VIDEO_RECORD_DESCMSG     = "descmsg";
-    public static final String VIDEO_RECORD_VIDEPATH    = "path";
-    public static final String VIDEO_RECORD_COVERPATH   = "coverpath";
-    public static final String VIDEO_RECORD_ROTATION    = "rotation";
-    public static final String VIDEO_RECORD_NO_CACHE    = "nocache";
+    public static final String VIDEO_RECORD_TYPE = "type";
+    public static final String VIDEO_RECORD_RESULT = "result";
+    public static final String VIDEO_RECORD_DESCMSG = "descmsg";
+    public static final String VIDEO_RECORD_VIDEPATH = "path";
+    public static final String VIDEO_RECORD_COVERPATH = "coverpath";
+    public static final String VIDEO_RECORD_ROTATION = "rotation";
+    public static final String VIDEO_RECORD_NO_CACHE = "nocache";
 
-    public static final int VIDEO_RECORD_TYPE_PUBLISH   = 1;   // 推流端录制
-    public static final int VIDEO_RECORD_TYPE_PLAY      = 2;   // 播放端录制
+    public static final int VIDEO_RECORD_TYPE_PUBLISH = 1;   // 推流端录制
+    public static final int VIDEO_RECORD_TYPE_PLAY = 2;   // 播放端录制
 
     //录制相关
     private boolean mRecording = false;
     private TXUGCRecord mTXCameraRecord = null;
     private ProgressBar mRecordProgress = null;
-    private long  mStartRecordTimeStamp = 0;
+    private long mStartRecordTimeStamp = 0;
     private BeautyDialogFragment.BeautyParams mBeautyParams = new BeautyDialogFragment.BeautyParams();
 
     private boolean mFlashOn = false;
     private boolean mFront = true;
     TXRecordCommon.TXRecordResult mTXRecordResult = null;
-    TXCloudVideoView    mVideoView;
+    TXCloudVideoView mVideoView;
     TextView mProgressTime;
 
     AudioManager mAudioManager;
@@ -83,7 +82,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         TXRecordCommon.TXUGCSimpleConfig param = new TXRecordCommon.TXUGCSimpleConfig();
         param.videoQuality = TXRecordCommon.VIDEO_QUALITY_MEDIUM;
         param.isFront = mFront;
-        mTXCameraRecord.startCameraSimplePreview(param,mVideoView);
+        mTXCameraRecord.startCameraSimplePreview(param, mVideoView);
         mTXCameraRecord.setBeautyDepth(mBeautyParams.mBeautyProgress, mBeautyParams.mWhiteProgress);
         mTXCameraRecord.setMotionTmpl(mBeautyParams.mMotionTmplPath);
 
@@ -106,52 +105,51 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             mTXCameraRecord.setVideoRecordListener(null);
             mTXCameraRecord = null;
         }
-        }
+    }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_beauty:
-                Bundle args = new Bundle();
-                args.putBoolean("hideMotionTable", true);
-                try {
-                    mBeautyDialogFragment.setArguments(args);
-                    mBeautyDialogFragment.show(getFragmentManager(), "");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        int i = view.getId();
+        if (i == R.id.btn_beauty) {
+            Bundle args = new Bundle();
+            args.putBoolean("hideMotionTable", true);
+            try {
+                mBeautyDialogFragment.setArguments(args);
+                mBeautyDialogFragment.show(getFragmentManager(), "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-                break;
-            case R.id.btn_flash:
-                mFlashOn = !mFlashOn;
-                if (mTXCameraRecord != null) {
-                    mTXCameraRecord.toggleTorch(mFlashOn);
-                }
-                break;
-            case R.id.btn_switch_camera:
-                mFront = !mFront;
-                if (mTXCameraRecord != null) {
-                    mTXCameraRecord.switchCamera(mFront);
-                }
-                break;
-            case R.id.btn_close:
-                if (mRecording && mTXCameraRecord != null) {
-                    mTXCameraRecord.stopRecord();
-                    mTXCameraRecord.setVideoRecordListener(null);
-                }
-                finish();
-                break;
-            case R.id.record:
-                switchRecord();
-                break;
-            default:
-                break;
+
+        } else if (i == R.id.btn_flash) {
+            mFlashOn = !mFlashOn;
+            if (mTXCameraRecord != null) {
+                mTXCameraRecord.toggleTorch(mFlashOn);
+            }
+
+        } else if (i == R.id.btn_switch_camera) {
+            mFront = !mFront;
+            if (mTXCameraRecord != null) {
+                mTXCameraRecord.switchCamera(mFront);
+            }
+
+        } else if (i == R.id.btn_close) {
+            if (mRecording && mTXCameraRecord != null) {
+                mTXCameraRecord.stopRecord();
+                mTXCameraRecord.setVideoRecordListener(null);
+            }
+            finish();
+
+        } else if (i == R.id.record) {
+            switchRecord();
+
+        } else {
         }
     }
 
     private void switchRecord() {
         if (mRecording) {
-           stopRecord(true);
+            stopRecord(true);
         } else {
             startRecord();
         }
@@ -159,7 +157,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
     private void stopRecord(boolean showToast) {
         // 录制时间要大于5s
-        if (System.currentTimeMillis() <= mStartRecordTimeStamp + 5*1000) {
+        if (System.currentTimeMillis() <= mStartRecordTimeStamp + 5 * 1000) {
             if (showToast) {
                 showTooShortToast();
                 return;
@@ -173,14 +171,14 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             mTXCameraRecord.stopRecord();
         }
         ImageView liveRecord = (ImageView) findViewById(R.id.record);
-        if(liveRecord != null) liveRecord.setBackgroundResource(R.drawable.start_record);
+        if (liveRecord != null) liveRecord.setBackgroundResource(R.drawable.start_record);
         mRecording = false;
 
         if (mRecordProgress != null) {
             mRecordProgress.setProgress(0);
         }
         if (mProgressTime != null) {
-            mProgressTime.setText(String.format(Locale.CHINA, "%s","00:00"));
+            mProgressTime.setText(String.format(Locale.CHINA, "%s", "00:00"));
         }
         abandonAudioFocus();
     }
@@ -196,7 +194,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             int[] position = new int[2];
             mRecordProgress.getLocationOnScreen(position);
             Toast toast = Toast.makeText(this, "至少录到这里", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.TOP|Gravity.LEFT, position[0], position[1] - statusBarHeight - 110);
+            toast.setGravity(Gravity.TOP | Gravity.LEFT, position[0], position[1] - statusBarHeight - 110);
             toast.show();
         }
     }
@@ -209,14 +207,14 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         mTXCameraRecord.setVideoRecordListener(this);
         int result = mTXCameraRecord.startRecord();
         if (result != 0) {
-            Toast.makeText(TCVideoRecordActivity.this.getApplicationContext(),"录制失败，错误码：" + result, Toast.LENGTH_SHORT).show();
+            Toast.makeText(TCVideoRecordActivity.this.getApplicationContext(), "录制失败，错误码：" + result, Toast.LENGTH_SHORT).show();
             mTXCameraRecord.setVideoRecordListener(null);
             mTXCameraRecord.stopRecord();
             return;
         }
         mRecording = true;
         ImageView liveRecord = (ImageView) findViewById(R.id.record);
-        if(liveRecord != null) liveRecord.setBackgroundResource(R.drawable.stop_record);
+        if (liveRecord != null) liveRecord.setBackgroundResource(R.drawable.stop_record);
         mStartRecordTimeStamp = System.currentTimeMillis();
         requestAudioFocus();
     }
@@ -263,7 +261,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
     @Override
     public void onBeautyParamsChange(BeautyDialogFragment.BeautyParams params, int key) {
-        switch (key){
+        switch (key) {
             case BeautyDialogFragment.BEAUTYPARAM_BEAUTY:
             case BeautyDialogFragment.BEAUTYPARAM_WHITE:
                 if (mTXCameraRecord != null) {
@@ -280,7 +278,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
                 }
                 break;
             case BeautyDialogFragment.BEAUTYPARAM_MOTION_TMPL:
-                if (mTXCameraRecord != null){
+                if (mTXCameraRecord != null) {
                     mTXCameraRecord.setMotionTmpl(params.mMotionTmplPath);
                 }
                 break;
@@ -299,7 +297,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         if (mRecordProgress != null) {
             float progress = milliSecond / 60000.0f;
             mRecordProgress.setProgress((int) (progress * 100));
-            mProgressTime.setText(String.format(Locale.CHINA, "00:%02d", milliSecond/1000));
+            mProgressTime.setText(String.format(Locale.CHINA, "00:%02d", milliSecond / 1000));
             if (milliSecond >= 60000.0f) {
                 stopRecord(true);
             }
@@ -311,16 +309,16 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         mTXRecordResult = result;
         if (mTXRecordResult.retCode != TXRecordCommon.RECORD_RESULT_OK) {
             ImageView liveRecord = (ImageView) findViewById(R.id.record);
-            if(liveRecord != null) liveRecord.setBackgroundResource(R.drawable.start_record);
+            if (liveRecord != null) liveRecord.setBackgroundResource(R.drawable.start_record);
             mRecording = false;
 
             if (mRecordProgress != null) {
                 mRecordProgress.setProgress(0);
             }
             if (mProgressTime != null) {
-                mProgressTime.setText(String.format(Locale.CHINA, "%s","00:00"));
+                mProgressTime.setText(String.format(Locale.CHINA, "%s", "00:00"));
             }
-            Toast.makeText(TCVideoRecordActivity.this.getApplicationContext(),"录制失败，原因：" + mTXRecordResult.descMsg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(TCVideoRecordActivity.this.getApplicationContext(), "录制失败，原因：" + mTXRecordResult.descMsg, Toast.LENGTH_SHORT).show();
         } else {
             View recordLayout = TCVideoRecordActivity.this.findViewById(R.id.record_layout);
             View publishLayout = TCVideoRecordActivity.this.findViewById(R.id.publishLayout);
@@ -338,7 +336,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             if (mRecordProgress != null) {
                 mRecordProgress.setProgress(0);
             }
-            mProgressTime.setText(String.format(Locale.CHINA, "%s","00:00"));
+            mProgressTime.setText(String.format(Locale.CHINA, "%s", "00:00"));
             Intent intent = new Intent();
             intent.putExtra("videoPath", mTXRecordResult.videoPath);
             intent.putExtra("coverPath", mTXRecordResult.coverPath);

@@ -121,35 +121,35 @@ public class ProfileActivity extends FragmentActivity implements FriendshipManag
      */
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btnChat:
-                Intent intent = new Intent(this, ChatActivity.class);
-                intent.putExtra("identify", identify);
-                intent.putExtra("type", TIMConversationType.C2C);
-                startActivity(intent);
-                finish();
-                break;
-            case R.id.btnDel:
-                friendshipManagerPresenter.delFriend(identify);
-                break;
-            case R.id.group:
-                final String[] groups = FriendshipInfo.getInstance().getGroupsArray();
-                for (int i = 0; i < groups.length; ++i) {
-                    if (groups[i].equals("")) {
-                        groups[i] = getString(R.string.default_group_name);
-                        break;
-                    }
+        int i1 = v.getId();
+        if (i1 == R.id.btnChat) {
+            Intent intent = new Intent(this, ChatActivity.class);
+            intent.putExtra("identify", identify);
+            intent.putExtra("type", TIMConversationType.C2C);
+            startActivity(intent);
+            finish();
+
+        } else if (i1 == R.id.btnDel) {
+            friendshipManagerPresenter.delFriend(identify);
+
+        } else if (i1 == R.id.group) {
+            final String[] groups = FriendshipInfo.getInstance().getGroupsArray();
+            for (int i = 0; i < groups.length; ++i) {
+                if (groups[i].equals("")) {
+                    groups[i] = getString(R.string.default_group_name);
+                    break;
                 }
-                new ListPickerDialog().show(groups, getSupportFragmentManager(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (groups[which].equals(categoryStr)) return;
-                        friendshipManagerPresenter.changeFriendGroup(identify,
-                                categoryStr.equals(getString(R.string.default_group_name))?null:categoryStr,
-                                groups[which].equals(getString(R.string.default_group_name))?null:groups[which]);
-                    }
-                });
-                break;
+            }
+            new ListPickerDialog().show(groups, getSupportFragmentManager(), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (groups[which].equals(categoryStr)) return;
+                    friendshipManagerPresenter.changeFriendGroup(identify,
+                            categoryStr.equals(getString(R.string.default_group_name)) ? null : categoryStr,
+                            groups[which].equals(getString(R.string.default_group_name)) ? null : groups[which]);
+                }
+            });
+
         }
     }
 

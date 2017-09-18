@@ -1,6 +1,8 @@
 package com.crazyjiang.crazydemo.mvp.ui.activity;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crazyjiang.crazydemo.R;
 import com.crazyjiang.crazydemo.app.constant.Constant;
@@ -22,12 +25,23 @@ import com.crazyjiang.crazydemo.mvp.presenter.MainPresenter;
 import com.crazyjiang.crazydemo.mvp.ui.fragment.InboxFragment;
 import com.crazyjiang.crazydemo.mvp.ui.fragment.PostersFragment;
 import com.crazyjiang.crazydemo.mvp.ui.fragment.VideosFragment;
+import com.huawei.android.pushagent.PushManager;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMLogLevel;
+import com.tencent.qcloud.presentation.business.InitBusiness;
+import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.tencent.qcloud.timchat.model.UserInfo;
+import com.tencent.qcloud.timchat.utils.PushUtil;
+import com.tencent.qcloud.tlslibrary.service.TLSService;
+import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
+import com.tencent.qcloud.ui.NotifyDialog;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +50,7 @@ import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View {
+public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View, TIMCallBack {
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
     @BindView(R.id.bottomBar)
@@ -122,8 +136,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         FragmentUtils.addFragments(getSupportFragmentManager(), mFragments, R.id.main_frame, 0);
         mBottomBar.setOnTabSelectListener(mOnTabSelectListener);
 
-        // init tencent im
 
+        //初始化IMSDK
+        InitBusiness.start(getApplicationContext(), TIMLogLevel.DEBUG.ordinal());
+        //初始化TLS
+        TlsBusiness.init(getApplicationContext());
+        String id = TLSService.getInstance().getLastUserIdentifier();
+        UserInfo.getInstance().setId(id);
+        UserInfo.getInstance().setUserSig(TLSService.getInstance().getUserSig(id));
     }
 
     @Override
@@ -182,5 +202,61 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         this.mTitles = null;
         this.mFragments = null;
         this.mNavIds = null;
+    }
+
+    @Override
+    public void onError(int i, String s) {
+        switch (i) {
+            case 6208:
+                //离线状态下被其他终端踢下线
+                NotifyDialog dialog = new NotifyDialog();
+                dialog.show(getString(com.tencent.qcloud.timchat.R.string.kick_logout), getSupportFragmentManager(), (dialog1, which) -> {
+                    // navToHome();
+
+                    ArmsUtils.snackbarText("nav to home");
+                });
+                break;
+            case 6200:
+                Toast.makeText(this, getString(com.tencent.qcloud.timchat.R.string.login_error_timeout), Toast.LENGTH_SHORT).show();
+                // navToLogin();
+                ArmsUtils.snackbarText("nav to login");
+                break;
+            default:
+                Toast.makeText(this, getString(com.tencent.qcloud.timchat.R.string.login_error), Toast.LENGTH_SHORT).show();
+                // navToLogin();
+                ArmsUtils.snackbarText("nav to login");
+                break;
+        }
+    }
+
+    @Override
+    public void onSuccess() {
+        //初始化程序后台后消息推送
+        PushUtil.getInstance();
+        //初始化消息监听
+        MessageEvent.getInstance();
+        String deviceMan = android.os.Build.MANUFACTURER;
+        //注册小米和华为推送
+        if (deviceMan.equals("Xiaomi") && shouldMiInit()) {
+            MiPushClient.registerPush(getApplicationContext(), "2882303761517480335", "5411748055335");
+        } else if (deviceMan.equals("HUAWEI")) {
+            PushManager.requestToken(this);
+        }
+    }
+
+    /**
+     * 判断小米推送是否已经初始化
+     */
+    private boolean shouldMiInit() {
+        ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
+        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+        String mainProcessName = getPackageName();
+        int myPid = android.os.Process.myPid();
+        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

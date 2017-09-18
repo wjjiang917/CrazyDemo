@@ -7,16 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jess.arms.di.component.AppComponent;
-import com.jess.arms.utils.ArmsUtils;
-
+import com.crazyjiang.crazydemo.R;
 import com.crazyjiang.crazydemo.app.base.BaseFragment;
 import com.crazyjiang.crazydemo.di.component.DaggerInboxComponent;
 import com.crazyjiang.crazydemo.di.module.InboxModule;
 import com.crazyjiang.crazydemo.mvp.contract.InboxContract;
 import com.crazyjiang.crazydemo.mvp.presenter.InboxPresenter;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
 
-import com.crazyjiang.crazydemo.R;
+import timber.log.Timber;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -44,6 +44,17 @@ public class InboxFragment extends BaseFragment<InboxPresenter> implements Inbox
     public void initData(Bundle savedInstanceState) {
 
     }
+
+//    @Override
+//    protected void onFragmentFirstVisible() {
+//        super.onFragmentFirstVisible();
+//
+//        Timber.i("onFragmentFirstVisible......" + isFragmentVisible());
+//        if (isFragmentVisible()){
+//
+//        }
+//        launchActivity(new Intent(getContext(), HomeActivity.class));
+//    }
 
     /**
      * 此方法是让外部调用使fragment做一些操作的,比如说外部的activity想让fragment对象执行一些方法,

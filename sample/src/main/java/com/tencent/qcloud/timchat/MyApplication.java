@@ -21,19 +21,19 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Foreground.init(this);
-        context = getApplicationContext();
-        if(MsfSdkUtils.isMainProcess(this)) {
-            TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
-                @Override
-                public void handleNotification(TIMOfflinePushNotification notification) {
-                    if (notification.getGroupReceiveMsgOpt() == TIMGroupReceiveMessageOpt.ReceiveAndNotify){
-                        //消息被设置为需要提醒
-                        notification.doNotify(getApplicationContext(), R.mipmap.ic_launcher);
-                    }
-                }
-            });
-        }
+//        Foreground.init(this);
+//        context = getApplicationContext();
+//        if(MsfSdkUtils.isMainProcess(this)) {
+//            TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
+//                @Override
+//                public void handleNotification(TIMOfflinePushNotification notification) {
+//                    if (notification.getGroupReceiveMsgOpt() == TIMGroupReceiveMessageOpt.ReceiveAndNotify){
+//                        //消息被设置为需要提醒
+//                        notification.doNotify(getApplicationContext(), R.mipmap.ic_launcher);
+//                    }
+//                }
+//            });
+//        }
     }
 
     public static Context getContext() {
@@ -41,5 +41,7 @@ public class MyApplication extends Application {
     }
 
 
-
+    public static void setContext(Context context) {
+        MyApplication.context = context;
+    }
 }

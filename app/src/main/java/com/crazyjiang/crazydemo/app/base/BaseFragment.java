@@ -53,7 +53,7 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
         initVariable();
     }
 
-    //    @Override
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         //如果setUserVisibleHint()在rootView创建前调用时，那么
         //就等到rootView创建完后才回调onFragmentVisibleChange(true)

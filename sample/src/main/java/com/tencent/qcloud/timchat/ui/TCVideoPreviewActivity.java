@@ -113,33 +113,31 @@ public class TCVideoPreviewActivity extends Activity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.record_delete:
-                deleteVideo();
-                break;
-            case R.id.record_download:
-                //downloadRecord();
-                break;
-            case R.id.record_publish:
-                startPublish();
-                break;
-            case R.id.record_preview:
-                if (mVideoPlay) {
-                    if (mVideoPause) {
-                        mTXLivePlayer.resume();
-                        mStartPreview.setBackgroundResource(R.drawable.icon_record_pause);
-                        mVideoPause = false;
-                    } else {
-                        mTXLivePlayer.pause();
-                        mStartPreview.setBackgroundResource(R.drawable.icon_record_start);
-                        mVideoPause = true;
-                    }
+        int i = v.getId();
+        if (i == R.id.record_delete) {
+            deleteVideo();
+
+        } else if (i == R.id.record_download) {//downloadRecord();
+
+        } else if (i == R.id.record_publish) {
+            startPublish();
+
+        } else if (i == R.id.record_preview) {
+            if (mVideoPlay) {
+                if (mVideoPause) {
+                    mTXLivePlayer.resume();
+                    mStartPreview.setBackgroundResource(R.drawable.icon_record_pause);
+                    mVideoPause = false;
                 } else {
-                    startPlay();
+                    mTXLivePlayer.pause();
+                    mStartPreview.setBackgroundResource(R.drawable.icon_record_start);
+                    mVideoPause = true;
                 }
-                break;
-            default:
-                break;
+            } else {
+                startPlay();
+            }
+
+        } else {
         }
 
     }

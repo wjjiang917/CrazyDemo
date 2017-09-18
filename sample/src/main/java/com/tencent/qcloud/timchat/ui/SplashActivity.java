@@ -204,13 +204,13 @@ public class SplashActivity extends FragmentActivity implements SplashView, TIMC
         }
 
 
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, "refreshed token: " + refreshedToken);
-
-        if (!TextUtils.isEmpty(refreshedToken)) {
-            TIMOfflinePushToken param = new TIMOfflinePushToken(169, refreshedToken);
-            TIMManager.getInstance().setOfflinePushToken(param, null);
-        }
+//        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+//        Log.d(TAG, "refreshed token: " + refreshedToken);
+//
+//        if (!TextUtils.isEmpty(refreshedToken)) {
+//            TIMOfflinePushToken param = new TIMOfflinePushToken(169, refreshedToken);
+//            TIMManager.getInstance().setOfflinePushToken(param, null);
+//        }
 //        MiPushClient.clearNotification(getApplicationContext());
         Log.d(TAG, "imsdk env " + TIMManager.getInstance().getEnv());
         Intent intent = new Intent(this, HomeActivity.class);

@@ -234,27 +234,26 @@ public class BeautyDialogFragment extends DialogFragment implements SeekBar.OnSe
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        switch (seekBar.getId()){
-            case R.id.beauty_seekbar:
-                mBeautyParams.mBeautyProgress = TCUtils.filtNumber(9,mBeautySeekbar.getMax(),progress);
-                if(mBeautyParamsChangeListener instanceof OnBeautyParamsChangeListener){
-                    mBeautyParamsChangeListener.onBeautyParamsChange(mBeautyParams, BEAUTYPARAM_BEAUTY);
-                }
-                break;
-            case R.id.whiten_seekbar:
-                mBeautyParams.mWhiteProgress = TCUtils.filtNumber(9,mWhitenSeekbar.getMax(),progress);
-                if(mBeautyParamsChangeListener instanceof OnBeautyParamsChangeListener){
-                    mBeautyParamsChangeListener.onBeautyParamsChange(mBeautyParams, BEAUTYPARAM_WHITE);
-                }
-                break;
-            case R.id.facelift_seekbar:
-                mBeautyParams.mFaceLiftProgress = progress;
-                break;
-            case R.id.bigeye_seekbar:
-                mBeautyParams.mBigEyeProgress = progress;
-                break;
-            default:
-                break;
+        int i = seekBar.getId();
+        if (i == R.id.beauty_seekbar) {
+            mBeautyParams.mBeautyProgress = TCUtils.filtNumber(9, mBeautySeekbar.getMax(), progress);
+            if (mBeautyParamsChangeListener instanceof OnBeautyParamsChangeListener) {
+                mBeautyParamsChangeListener.onBeautyParamsChange(mBeautyParams, BEAUTYPARAM_BEAUTY);
+            }
+
+        } else if (i == R.id.whiten_seekbar) {
+            mBeautyParams.mWhiteProgress = TCUtils.filtNumber(9, mWhitenSeekbar.getMax(), progress);
+            if (mBeautyParamsChangeListener instanceof OnBeautyParamsChangeListener) {
+                mBeautyParamsChangeListener.onBeautyParamsChange(mBeautyParams, BEAUTYPARAM_WHITE);
+            }
+
+        } else if (i == R.id.facelift_seekbar) {
+            mBeautyParams.mFaceLiftProgress = progress;
+
+        } else if (i == R.id.bigeye_seekbar) {
+            mBeautyParams.mBigEyeProgress = progress;
+
+        } else {
         }
     }
 

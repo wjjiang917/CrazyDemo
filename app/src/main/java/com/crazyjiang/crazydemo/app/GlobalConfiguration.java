@@ -24,6 +24,8 @@ import com.squareup.leakcanary.RefWatcher;
 import com.tencent.imsdk.TIMGroupReceiveMessageOpt;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
+import com.tencent.qcloud.timchat.MyApplication;
+import com.tencent.qcloud.timchat.utils.Foreground;
 
 import java.util.List;
 
@@ -74,6 +76,8 @@ public class GlobalConfiguration implements ConfigModule {
 
 
                 // tencent IM
+                MyApplication.setContext(application);
+                Foreground.init(application);
                 if (MsfSdkUtils.isMainProcess(application)) {
                     TIMManager.getInstance().setOfflinePushListener(notification -> {
                         if (notification.getGroupReceiveMsgOpt() == TIMGroupReceiveMessageOpt.ReceiveAndNotify) {
