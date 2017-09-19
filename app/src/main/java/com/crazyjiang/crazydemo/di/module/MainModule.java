@@ -1,12 +1,11 @@
 package com.crazyjiang.crazydemo.di.module;
 
-import com.jess.arms.di.scope.ActivityScope;
 import com.crazyjiang.crazydemo.mvp.contract.MainContract;
 import com.crazyjiang.crazydemo.mvp.model.MainModel;
+import com.jess.arms.di.scope.ActivityScope;
 
 import dagger.Module;
 import dagger.Provides;
-
 
 @Module
 public class MainModule {

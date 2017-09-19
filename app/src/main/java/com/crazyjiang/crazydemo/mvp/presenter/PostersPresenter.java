@@ -7,7 +7,7 @@ import com.crazyjiang.crazydemo.mvp.contract.PostersContract;
 import com.crazyjiang.crazydemo.mvp.model.entity.QueryResp;
 import com.crazyjiang.crazydemo.mvp.model.entity.RankLabelEntity;
 import com.crazyjiang.crazydemo.mvp.model.entity.RoomEntity;
-import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
@@ -20,7 +20,7 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
-@ActivityScope
+@FragmentScope
 public class PostersPresenter extends BasePresenter<PostersContract.Model, PostersContract.View> {
     private RxErrorHandler mErrorHandler;
     private Application mApplication;

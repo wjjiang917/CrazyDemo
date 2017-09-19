@@ -1,14 +1,18 @@
 package com.crazyjiang.crazydemo.app.base;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.crazyjiang.crazydemo.app.utils.FragmentUtils;
 import com.jess.arms.base.delegate.IFragment;
 import com.jess.arms.mvp.IPresenter;
 import com.trello.rxlifecycle2.components.support.RxFragment;
+
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -33,6 +37,10 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // set fragment color
+        Random random = new Random();
+        FragmentUtils.setBackgroundColor(this, Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+
         return initView(inflater, container, savedInstanceState);
     }
 

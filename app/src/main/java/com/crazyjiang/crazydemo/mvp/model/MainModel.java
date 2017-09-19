@@ -10,7 +10,6 @@ import com.crazyjiang.crazydemo.mvp.contract.MainContract;
 
 import javax.inject.Inject;
 
-
 @ActivityScope
 public class MainModel extends BaseModel implements MainContract.Model {
     private Gson mGson;

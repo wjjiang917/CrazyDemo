@@ -8,15 +8,15 @@ import com.crazyjiang.crazydemo.mvp.model.entity.QueryResp;
 import com.crazyjiang.crazydemo.mvp.model.entity.RankLabelEntity;
 import com.crazyjiang.crazydemo.mvp.model.entity.RoomEntity;
 import com.google.gson.Gson;
-import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
 
 import javax.inject.Inject;
 
+import dagger.Module;
 import io.reactivex.Observable;
 
-@ActivityScope
+@Module
 public class PostersModel extends BaseModel implements PostersContract.Model {
     private Gson mGson;
     private Application mApplication;

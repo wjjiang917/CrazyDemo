@@ -2,7 +2,6 @@ package com.crazyjiang.crazydemo.mvp.ui.activity;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -133,9 +132,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             mFragments.add(postersFragment);
             mFragments.add(inboxFragment);
         }
-        FragmentUtils.addFragments(getSupportFragmentManager(), mFragments, R.id.main_frame, 0);
+        FragmentUtils.addFragments(getSupportFragmentManager(), mFragments, R.id.main_frame, mIndex);
         mBottomBar.setOnTabSelectListener(mOnTabSelectListener);
-
 
         //初始化IMSDK
         InitBusiness.start(getApplicationContext(), TIMLogLevel.DEBUG.ordinal());
