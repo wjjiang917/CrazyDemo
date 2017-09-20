@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
@@ -32,6 +31,8 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -49,6 +50,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     private List<Fragment> mFragments;
     private List<Integer> mNavIds;
     private int mIndex = 0;
+
+    // 当需要在Activity中通过@Inject注入Fragment时，需要将对应的Fragment在ActivityModule中@Provides
+    @Inject
+    VideosFragment videosFragment;
+    @Inject
+    PostersFragment postersFragment;
+    @Inject
+    InboxFragment inboxFragment;
 
     private OnTabSelectListener mOnTabSelectListener = tabId -> {
         switch (tabId) {
@@ -99,19 +108,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             mNavIds.add(R.id.tab_inbox);
         }
 
-        VideosFragment videosFragment;
-        PostersFragment postersFragment;
-        InboxFragment inboxFragment;
-        if (savedInstanceState == null) {
-            videosFragment = VideosFragment.newInstance();
-            postersFragment = PostersFragment.newInstance();
-            inboxFragment = InboxFragment.newInstance();
-        } else {
+        if (savedInstanceState != null) {
             mIndex = savedInstanceState.getInt(Constant.TAB_INDEX);
-            FragmentManager fm = getSupportFragmentManager();
-            videosFragment = (VideosFragment) FragmentUtils.findFragment(fm, VideosFragment.class);
-            postersFragment = (PostersFragment) FragmentUtils.findFragment(fm, PostersFragment.class);
-            inboxFragment = (InboxFragment) FragmentUtils.findFragment(fm, InboxFragment.class);
+//            FragmentManager fm = getSupportFragmentManager();
+//            videosFragment = (VideosFragment) FragmentUtils.findFragment(fm, VideosFragment.class);
+//            postersFragment = (PostersFragment) FragmentUtils.findFragment(fm, PostersFragment.class);
+//            inboxFragment = (InboxFragment) FragmentUtils.findFragment(fm, InboxFragment.class);
         }
         if (mFragments == null) {
             mFragments = new ArrayList<>();

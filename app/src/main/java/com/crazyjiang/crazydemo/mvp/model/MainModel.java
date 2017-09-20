@@ -2,14 +2,13 @@ package com.crazyjiang.crazydemo.mvp.model;
 
 import android.app.Application;
 
+import com.crazyjiang.crazydemo.mvp.contract.MainContract;
 import com.google.gson.Gson;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
-import com.crazyjiang.crazydemo.mvp.contract.MainContract;
 
 import javax.inject.Inject;
-
 
 @ActivityScope
 public class MainModel extends BaseModel implements MainContract.Model {
@@ -29,5 +28,4 @@ public class MainModel extends BaseModel implements MainContract.Model {
         this.mGson = null;
         this.mApplication = null;
     }
-
 }
