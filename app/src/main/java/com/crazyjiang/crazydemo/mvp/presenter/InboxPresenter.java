@@ -2,18 +2,17 @@ package com.crazyjiang.crazydemo.mvp.presenter;
 
 import android.app.Application;
 
-import com.jess.arms.integration.AppManager;
-import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
+import com.crazyjiang.crazydemo.mvp.contract.InboxContract;
+import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.http.imageloader.ImageLoader;
-
-import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
 
 import javax.inject.Inject;
 
-import com.crazyjiang.crazydemo.mvp.contract.InboxContract;
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
-@ActivityScope
+@FragmentScope
 public class InboxPresenter extends BasePresenter<InboxContract.Model, InboxContract.View> {
     private RxErrorHandler mErrorHandler;
     private Application mApplication;

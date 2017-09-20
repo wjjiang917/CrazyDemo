@@ -1,12 +1,11 @@
 package com.crazyjiang.crazydemo.di.module;
 
-import com.jess.arms.di.scope.ActivityScope;
+import com.crazyjiang.crazydemo.mvp.contract.PostersContract;
+import com.crazyjiang.crazydemo.mvp.model.PostersModel;
+import com.jess.arms.di.scope.FragmentScope;
 
 import dagger.Module;
 import dagger.Provides;
-
-import com.crazyjiang.crazydemo.mvp.contract.PostersContract;
-import com.crazyjiang.crazydemo.mvp.model.PostersModel;
 
 @Module
 public class PostersModule {
@@ -21,13 +20,13 @@ public class PostersModule {
         this.view = view;
     }
 
-    @ActivityScope
+    @FragmentScope
     @Provides
     PostersContract.View providePostersView() {
         return this.view;
     }
 
-    @ActivityScope
+    @FragmentScope
     @Provides
     PostersContract.Model providePostersModel(PostersModel model) {
         return model;

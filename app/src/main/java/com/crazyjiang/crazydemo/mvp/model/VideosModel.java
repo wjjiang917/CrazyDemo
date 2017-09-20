@@ -8,7 +8,7 @@ import com.crazyjiang.crazydemo.mvp.model.api.cache.CommonCache;
 import com.crazyjiang.crazydemo.mvp.model.entity.QueryResp;
 import com.crazyjiang.crazydemo.mvp.model.entity.VideoEntity;
 import com.google.gson.Gson;
-import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
 
@@ -21,7 +21,7 @@ import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
 import io.rx_cache2.Reply;
 
-@ActivityScope
+@FragmentScope
 public class VideosModel extends BaseModel implements VideosContract.Model {
     private Gson mGson;
     private Application mApplication;

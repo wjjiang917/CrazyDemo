@@ -119,7 +119,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             mFragments.add(postersFragment);
             mFragments.add(inboxFragment);
         }
-        FragmentUtils.addFragments(getSupportFragmentManager(), mFragments, R.id.main_frame, 0);
+        FragmentUtils.addFragments(getSupportFragmentManager(), mFragments, R.id.main_frame, mIndex);
         mBottomBar.setOnTabSelectListener(mOnTabSelectListener);
     }
 

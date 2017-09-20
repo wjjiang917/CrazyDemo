@@ -2,17 +2,15 @@ package com.crazyjiang.crazydemo.mvp.model;
 
 import android.app.Application;
 
+import com.crazyjiang.crazydemo.mvp.contract.InboxContract;
 import com.google.gson.Gson;
+import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
 
-import com.jess.arms.di.scope.ActivityScope;
-
 import javax.inject.Inject;
 
-import com.crazyjiang.crazydemo.mvp.contract.InboxContract;
-
-@ActivityScope
+@FragmentScope
 public class InboxModel extends BaseModel implements InboxContract.Model {
     private Gson mGson;
     private Application mApplication;

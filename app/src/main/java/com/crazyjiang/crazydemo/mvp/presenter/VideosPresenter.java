@@ -5,7 +5,7 @@ import android.app.Application;
 import com.crazyjiang.crazydemo.mvp.contract.VideosContract;
 import com.crazyjiang.crazydemo.mvp.model.entity.QueryResp;
 import com.crazyjiang.crazydemo.mvp.model.entity.VideoEntity;
-import com.jess.arms.di.scope.ActivityScope;
+import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
@@ -21,7 +21,7 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 
-@ActivityScope
+@FragmentScope
 public class VideosPresenter extends BasePresenter<VideosContract.Model, VideosContract.View> {
     public static final int PAGE_SIZE = 20;
 

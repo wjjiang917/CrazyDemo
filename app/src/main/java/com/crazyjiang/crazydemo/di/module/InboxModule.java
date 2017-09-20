@@ -1,12 +1,11 @@
 package com.crazyjiang.crazydemo.di.module;
 
-import com.jess.arms.di.scope.ActivityScope;
+import com.crazyjiang.crazydemo.mvp.contract.InboxContract;
+import com.crazyjiang.crazydemo.mvp.model.InboxModel;
+import com.jess.arms.di.scope.FragmentScope;
 
 import dagger.Module;
 import dagger.Provides;
-
-import com.crazyjiang.crazydemo.mvp.contract.InboxContract;
-import com.crazyjiang.crazydemo.mvp.model.InboxModel;
 
 @Module
 public class InboxModule {
@@ -21,13 +20,13 @@ public class InboxModule {
         this.view = view;
     }
 
-    @ActivityScope
+    @FragmentScope
     @Provides
     InboxContract.View provideInboxView() {
         return this.view;
     }
 
-    @ActivityScope
+    @FragmentScope
     @Provides
     InboxContract.Model provideInboxModel(InboxModel model) {
         return model;

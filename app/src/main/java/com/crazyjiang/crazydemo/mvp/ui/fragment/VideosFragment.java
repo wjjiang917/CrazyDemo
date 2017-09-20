@@ -52,7 +52,7 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
         DaggerVideosComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
-                .videosModule(new VideosModule(this))
+                .videosModule(new VideosModule(this, this))
                 .build()
                 .inject(this);
     }
