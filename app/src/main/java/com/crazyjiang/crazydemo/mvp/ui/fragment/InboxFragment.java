@@ -19,10 +19,6 @@ import com.jess.arms.utils.ArmsUtils;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class InboxFragment extends BaseFragment<InboxPresenter> implements InboxContract.View {
-    public static InboxFragment newInstance() {
-        return new InboxFragment();
-    }
-
     @Override
     public void setupFragmentComponent(AppComponent appComponent) {
         DaggerInboxComponent //if can't find this class, try compile this project

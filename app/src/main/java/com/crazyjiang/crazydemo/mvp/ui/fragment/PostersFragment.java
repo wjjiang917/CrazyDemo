@@ -41,10 +41,6 @@ public class PostersFragment extends BaseFragment<PostersPresenter> implements P
 
     private PostersAdapter mAdapter;
 
-    public static PostersFragment newInstance() {
-        return new PostersFragment();
-    }
-
     @Override
     public void setupFragmentComponent(AppComponent appComponent) {
         DaggerPostersComponent //if can't find this class, try compile this project
