@@ -42,10 +42,6 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
     private VideosAdapter mAdapter;
     private boolean loadMore = false;
 
-    public static VideosFragment newInstance() {
-        return new VideosFragment();
-    }
-
     @Override
     public void setupFragmentComponent(AppComponent appComponent) {
         DaggerVideosComponent //如找不到该类,请编译一下项目
@@ -96,7 +92,7 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
     }
 
     @Override
-    protected void onFragmentFirstVisible() {
+    protected void onFirstVisible() {
         //去服务器下载数据
         loadMore = false;
         mPresenter.requestData(loadMore);

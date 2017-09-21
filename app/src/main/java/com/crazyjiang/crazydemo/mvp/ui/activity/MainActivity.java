@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
@@ -32,18 +31,15 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.imsdk.TIMCallBack;
-import com.tencent.imsdk.TIMLogLevel;
-import com.tencent.qcloud.presentation.business.InitBusiness;
 import com.tencent.qcloud.presentation.event.MessageEvent;
-import com.tencent.qcloud.timchat.model.UserInfo;
 import com.tencent.qcloud.timchat.utils.PushUtil;
-import com.tencent.qcloud.tlslibrary.service.TLSService;
-import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 import com.tencent.qcloud.ui.NotifyDialog;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 
@@ -63,6 +59,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     private List<Integer> mNavIds;
     private int mIndex = 0;
 
+    // 当需要在Activity中通过@Inject注入Fragment时，需要将对应的Fragment在ActivityModule中@Provides
+    @Inject
+    VideosFragment videosFragment;
+    @Inject
+    PostersFragment postersFragment;
+    @Inject
+    InboxFragment inboxFragment;
+
     private OnTabSelectListener mOnTabSelectListener = tabId -> {
         switch (tabId) {
             case R.id.tab_videos:
@@ -76,7 +80,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 break;
         }
         mToolbarTitle.setText(mTitles.get(mIndex));
-        FragmentUtils.hideAllShowFragment(mFragments.get(mIndex));
+        FragmentUtils.hideShowFragment(mFragments.get(mIndex));
     };
 
     @Override
@@ -112,19 +116,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             mNavIds.add(R.id.tab_inbox);
         }
 
-        VideosFragment videosFragment;
-        PostersFragment postersFragment;
-        InboxFragment inboxFragment;
-        if (savedInstanceState == null) {
-            videosFragment = VideosFragment.newInstance();
-            postersFragment = PostersFragment.newInstance();
-            inboxFragment = InboxFragment.newInstance();
-        } else {
+        if (savedInstanceState != null) {
             mIndex = savedInstanceState.getInt(Constant.TAB_INDEX);
-            FragmentManager fm = getSupportFragmentManager();
-            videosFragment = (VideosFragment) FragmentUtils.findFragment(fm, VideosFragment.class);
-            postersFragment = (PostersFragment) FragmentUtils.findFragment(fm, PostersFragment.class);
-            inboxFragment = (InboxFragment) FragmentUtils.findFragment(fm, InboxFragment.class);
+//            FragmentManager fm = getSupportFragmentManager();
+//            videosFragment = (VideosFragment) FragmentUtils.findFragment(fm, VideosFragment.class);
+//            postersFragment = (PostersFragment) FragmentUtils.findFragment(fm, PostersFragment.class);
+//            inboxFragment = (InboxFragment) FragmentUtils.findFragment(fm, InboxFragment.class);
         }
         if (mFragments == null) {
             mFragments = new ArrayList<>();
@@ -132,16 +129,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             mFragments.add(postersFragment);
             mFragments.add(inboxFragment);
         }
-        FragmentUtils.addFragments(getSupportFragmentManager(), mFragments, R.id.main_frame, mIndex);
+        FragmentUtils.removeAllFragments(getSupportFragmentManager());
+        FragmentUtils.addFragments(getSupportFragmentManager(), mFragments, R.id.main_frame);
         mBottomBar.setOnTabSelectListener(mOnTabSelectListener);
-
-        //初始化IMSDK
-        InitBusiness.start(getApplicationContext(), TIMLogLevel.DEBUG.ordinal());
-        //初始化TLS
-        TlsBusiness.init(getApplicationContext());
-        String id = TLSService.getInstance().getLastUserIdentifier();
-        UserInfo.getInstance().setId(id);
-        UserInfo.getInstance().setUserSig(TLSService.getInstance().getUserSig(id));
     }
 
     @Override

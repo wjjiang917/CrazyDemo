@@ -15,16 +15,11 @@ import com.crazyjiang.crazydemo.mvp.contract.InboxContract;
 import com.crazyjiang.crazydemo.mvp.presenter.InboxPresenter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-
-import timber.log.Timber;
+import com.tencent.qcloud.timchat.ui.HomeActivity;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 public class InboxFragment extends BaseFragment<InboxPresenter> implements InboxContract.View {
-    public static InboxFragment newInstance() {
-        return new InboxFragment();
-    }
-
     @Override
     public void setupFragmentComponent(AppComponent appComponent) {
         DaggerInboxComponent //if can't find this class, try compile this project
@@ -45,7 +40,14 @@ public class InboxFragment extends BaseFragment<InboxPresenter> implements Inbox
 
     }
 
-//    @Override
+    @Override
+    protected void onFirstVisible() {
+        super.onFirstVisible();
+
+        launchActivity(new Intent(getContext(), HomeActivity.class));
+    }
+
+    //    @Override
 //    protected void onFragmentFirstVisible() {
 //        super.onFragmentFirstVisible();
 //
