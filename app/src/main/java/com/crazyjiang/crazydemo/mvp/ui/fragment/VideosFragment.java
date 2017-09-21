@@ -107,7 +107,7 @@ public class VideosFragment extends BaseFragment<VideosPresenter> implements Vid
     }
 
     @Override
-    protected void onFragmentFirstVisible() {
+    public void onFirstVisible() {
         //去服务器下载数据
         loadMore = false;
         mPresenter.requestData(false);

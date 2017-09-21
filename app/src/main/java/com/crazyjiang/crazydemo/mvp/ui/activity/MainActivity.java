@@ -72,7 +72,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 break;
         }
         mToolbarTitle.setText(mTitles.get(mIndex));
-        FragmentUtils.hideAllShowFragment(mFragments.get(mIndex));
+        FragmentUtils.hideShowFragment(mFragments.get(mIndex));
     };
 
     @Override
@@ -121,7 +121,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             mFragments.add(postersFragment);
             mFragments.add(inboxFragment);
         }
-        FragmentUtils.addFragments(getSupportFragmentManager(), mFragments, R.id.main_frame, mIndex);
+        FragmentUtils.removeAllFragments(getSupportFragmentManager());
+        FragmentUtils.addFragments(getSupportFragmentManager(), mFragments, R.id.main_frame);
         mBottomBar.setOnTabSelectListener(mOnTabSelectListener);
     }
 

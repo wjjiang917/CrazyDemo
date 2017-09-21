@@ -68,7 +68,7 @@ public class PostersFragment extends BaseFragment<PostersPresenter> implements P
     }
 
     @Override
-    protected void onFragmentFirstVisible() {
+    public void onFirstVisible() {
         //去服务器下载数据
         mPresenter.requestData();
     }
