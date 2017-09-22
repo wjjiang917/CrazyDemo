@@ -44,7 +44,7 @@ public class InboxFragment extends BaseFragment<InboxPresenter> implements Inbox
     protected void onFirstVisible() {
         super.onFirstVisible();
 
-        launchActivity(new Intent(getContext(), HomeActivity.class));
+        // launchActivity(new Intent(getContext(), HomeActivity.class));
     }
 
     //    @Override

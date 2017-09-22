@@ -2,11 +2,13 @@ package com.crazyjiang.crazydemo.mvp.ui.activity;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
@@ -20,9 +22,10 @@ import com.crazyjiang.crazydemo.di.component.DaggerMainComponent;
 import com.crazyjiang.crazydemo.di.module.MainModule;
 import com.crazyjiang.crazydemo.mvp.contract.MainContract;
 import com.crazyjiang.crazydemo.mvp.presenter.MainPresenter;
-import com.crazyjiang.crazydemo.mvp.ui.fragment.InboxFragment;
 import com.crazyjiang.crazydemo.mvp.ui.fragment.PostersFragment;
 import com.crazyjiang.crazydemo.mvp.ui.fragment.VideosFragment;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.huawei.android.pushagent.PushManager;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
@@ -31,8 +34,24 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMConnListener;
+import com.tencent.imsdk.TIMLogLevel;
+import com.tencent.imsdk.TIMManager;
+import com.tencent.imsdk.TIMUserConfig;
+import com.tencent.imsdk.TIMUserStatusListener;
+import com.tencent.qcloud.presentation.business.InitBusiness;
+import com.tencent.qcloud.presentation.business.LoginBusiness;
+import com.tencent.qcloud.presentation.event.FriendshipEvent;
+import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.tencent.qcloud.presentation.event.RefreshEvent;
+import com.tencent.qcloud.timchat.model.UserInfo;
+import com.tencent.qcloud.timchat.ui.ConversationFragment;
+import com.tencent.qcloud.timchat.ui.customview.DialogActivity;
 import com.tencent.qcloud.timchat.utils.PushUtil;
+import com.tencent.qcloud.tlslibrary.activity.HostLoginActivity;
+import com.tencent.qcloud.tlslibrary.service.TLSService;
+import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 import com.tencent.qcloud.ui.NotifyDialog;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
@@ -42,6 +61,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import timber.log.Timber;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -52,6 +72,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     BottomBar mBottomBar;
     @BindView(R.id.toolbar_back)
     RelativeLayout toolbarBack;
+    @BindView(R.id.toolbar_contact)
+    RelativeLayout toolbarContact;
 
     private RxPermissions mRxPermissions;
     private List<Integer> mTitles;
@@ -64,10 +86,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     VideosFragment videosFragment;
     @Inject
     PostersFragment postersFragment;
-    @Inject
-    InboxFragment inboxFragment;
+//    @Inject
+//    InboxFragment inboxFragment;
+
+    ConversationFragment conversationFragment;
 
     private OnTabSelectListener mOnTabSelectListener = tabId -> {
+        toolbarContact.setVisibility(View.GONE);
         switch (tabId) {
             case R.id.tab_videos:
                 mIndex = 0;
@@ -76,6 +101,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 mIndex = 1;
                 break;
             case R.id.tab_inbox:
+                toolbarContact.setVisibility(View.VISIBLE);
                 mIndex = 2;
                 break;
         }
@@ -102,6 +128,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public void initData(Bundle savedInstanceState) {
         toolbarBack.setVisibility(View.GONE);
+        toolbarContact.setVisibility(View.GONE);
         mPresenter.requestPermissions();
         if (mTitles == null) {
             mTitles = new ArrayList<>();
@@ -122,16 +149,83 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 //            videosFragment = (VideosFragment) FragmentUtils.findFragment(fm, VideosFragment.class);
 //            postersFragment = (PostersFragment) FragmentUtils.findFragment(fm, PostersFragment.class);
 //            inboxFragment = (InboxFragment) FragmentUtils.findFragment(fm, InboxFragment.class);
+
+            conversationFragment = (ConversationFragment) FragmentUtils.findFragment(getSupportFragmentManager(), ConversationFragment.class);
+        } else {
+            conversationFragment = new ConversationFragment();
         }
         if (mFragments == null) {
             mFragments = new ArrayList<>();
             mFragments.add(videosFragment);
             mFragments.add(postersFragment);
-            mFragments.add(inboxFragment);
+            mFragments.add(conversationFragment);
         }
         FragmentUtils.removeAllFragments(getSupportFragmentManager());
         FragmentUtils.addFragments(getSupportFragmentManager(), mFragments, R.id.main_frame);
         mBottomBar.setOnTabSelectListener(mOnTabSelectListener);
+
+
+        if (ConnectionResult.SUCCESS != GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)) {
+            showMessage(getString(com.tencent.qcloud.timchat.R.string.google_service_not_available));
+//            GoogleApiAvailability.getInstance().getErrorDialog(this, GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this),
+//                    GOOGLE_PLAY_RESULT_CODE).show();
+        }
+        //初始化IMSDK
+        InitBusiness.start(getApplicationContext(), TIMLogLevel.DEBUG.ordinal());
+        //初始化TLS
+        TlsBusiness.init(getApplicationContext());
+        String id = TLSService.getInstance().getLastUserIdentifier();
+        UserInfo.getInstance().setId(id);
+        UserInfo.getInstance().setUserSig(TLSService.getInstance().getUserSig(id));
+
+        boolean isUserLogin = UserInfo.getInstance().getId() != null && (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()));
+        if (!isUserLogin) {
+            launchActivity(new Intent(this, HostLoginActivity.class));
+        } else {
+            //登录之前要初始化群和好友关系链缓存
+            TIMUserConfig userConfig = new TIMUserConfig();
+            userConfig.setUserStatusListener(new TIMUserStatusListener() {
+                @Override
+                public void onForceOffline() {
+                    Log.d(TAG, "receive force offline message");
+                    launchActivity(new Intent(MainActivity.this, DialogActivity.class));
+                }
+
+                @Override
+                public void onUserSigExpired() {
+                    //票据过期，需要重新登录
+                    new NotifyDialog().show(getString(com.tencent.qcloud.timchat.R.string.tls_expire), getSupportFragmentManager(), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+//                            logout();
+                        }
+                    });
+                }
+            }).setConnectionListener(new TIMConnListener() {
+                @Override
+                public void onConnected() {
+                    Log.i(TAG, "onConnected");
+                }
+
+                @Override
+                public void onDisconnected(int code, String desc) {
+                    Log.i(TAG, "onDisconnected");
+                }
+
+                @Override
+                public void onWifiNeedAuth(String name) {
+                    Log.i(TAG, "onWifiNeedAuth");
+                }
+            });
+
+            //设置刷新监听
+            RefreshEvent.getInstance().init(userConfig);
+            userConfig = FriendshipEvent.getInstance().init(userConfig);
+            userConfig = GroupEvent.getInstance().init(userConfig);
+            userConfig = MessageEvent.getInstance().init(userConfig);
+            TIMManager.getInstance().setUserConfig(userConfig);
+            LoginBusiness.loginIm(UserInfo.getInstance().getId(), UserInfo.getInstance().getUserSig(), this);
+        }
     }
 
     @Override
@@ -194,6 +288,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void onError(int i, String s) {
+        Timber.e("onError... i: %d, s: %s", i, s);
         switch (i) {
             case 6208:
                 //离线状态下被其他终端踢下线
@@ -219,6 +314,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void onSuccess() {
+        Timber.i("onSuccess...");
+
         //初始化程序后台后消息推送
         PushUtil.getInstance();
         //初始化消息监听

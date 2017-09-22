@@ -17,13 +17,14 @@ public class InitBusiness {
 
     private static final String TAG = InitBusiness.class.getSimpleName();
 
-    private InitBusiness(){}
+    private InitBusiness() {
+    }
 
-    public static void start(Context context){
+    public static void start(Context context) {
         initImsdk(context, 0);
     }
 
-    public static void start(Context context, int logLevel){
+    public static void start(Context context, int logLevel) {
         initImsdk(context, logLevel);
     }
 
@@ -31,9 +32,10 @@ public class InitBusiness {
     /**
      * 初始化imsdk
      */
-    private static void initImsdk(Context context, int logLevel){
+    private static void initImsdk(Context context, int logLevel) {
         TIMSdkConfig config = new TIMSdkConfig(Constant.SDK_APPID);
         config.enableLogPrint(true)
+//                .enableCrashReport(true) // bugly
                 .setLogLevel(TIMLogLevel.values()[logLevel]);
         //初始化imsdk
         TIMManager.getInstance().init(context, config);
@@ -41,9 +43,6 @@ public class InitBusiness {
         Log.d(TAG, "initIMsdk");
 
     }
-
-
-
 
 
 }

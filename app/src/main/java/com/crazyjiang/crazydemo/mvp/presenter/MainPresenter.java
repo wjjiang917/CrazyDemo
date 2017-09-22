@@ -1,5 +1,6 @@
 package com.crazyjiang.crazydemo.mvp.presenter;
 
+import android.Manifest;
 import android.app.Application;
 
 import com.crazyjiang.crazydemo.mvp.contract.MainContract;
@@ -32,17 +33,20 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
     }
 
     public void requestPermissions() {
-        PermissionUtil.requestPermission(new PermissionUtil.RequestPermission() {
-            @Override
-            public void onRequestPermissionSuccess() {
-                //request permission success, do something.
-            }
+        PermissionUtil.requestPermission(
+                new PermissionUtil.RequestPermission() {
+                    @Override
+                    public void onRequestPermissionSuccess() {
+                        //request permission success, do something.
+                    }
 
-            @Override
-            public void onRequestPermissionFailure() {
-                mRootView.showMessage("Request permissions failure");
-            }
-        }, mRootView.getRxPermissions(), mErrorHandler);
+                    @Override
+                    public void onRequestPermissionFailure() {
+                        mRootView.showMessage("Request permissions failure");
+                    }
+                }, mRootView.getRxPermissions(), mErrorHandler,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     @Override

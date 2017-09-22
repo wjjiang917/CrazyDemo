@@ -9,13 +9,13 @@
     app:contentInsetStart="0dp"
     app:layout_scrollFlags="scroll|enterAlways"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    app:titleMarginStart="20dp">
+    app:titleMarginStart="12dp">
 
     <RelativeLayout
         android:id="@+id/toolbar_back"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="left">
+        android:layout_gravity="left">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -24,7 +24,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:src="@mipmap/ic_arrow_back_white_24dp" />
-
     </RelativeLayout>
 
     <TextView
@@ -35,4 +34,19 @@
         android:textColor="#fff"
         android:textSize="18dp"
         tools:text="Social" />
+
+    <RelativeLayout
+        android:id="@+id/toolbar_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="right">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_account_circle_black_24dp" />
+    </RelativeLayout>
 </android.support.v7.widget.Toolbar>

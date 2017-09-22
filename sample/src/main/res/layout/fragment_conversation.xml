@@ -9,7 +9,9 @@
     <com.tencent.qcloud.ui.TemplateTitle
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleText="@string/home_conversation_tab"/>
+        android:visibility="gone"
+        app:titleText="@string/home_conversation_tab" />
+
     <ListView
         android:id="@id/list"
         android:layout_width="match_parent"

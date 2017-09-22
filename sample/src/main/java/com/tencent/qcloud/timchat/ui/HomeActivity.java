@@ -44,10 +44,10 @@ public class HomeActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         if (requestPermission()) {
-            Intent intent = new Intent(HomeActivity.this,SplashActivity.class);
+            Intent intent = new Intent(HomeActivity.this, SplashActivity.class);
             finish();
             startActivity(intent);
-        }else {
+        } else {
             initView();
             Toast.makeText(this, getString(TIMManager.getInstance().getEnv() == 0 ? R.string.env_normal : R.string.env_test), Toast.LENGTH_SHORT).show();
         }
@@ -76,7 +76,7 @@ public class HomeActivity extends FragmentActivity {
         icon.setImageResource(mImageViewArray[index]);
         TextView title = (TextView) view.findViewById(R.id.title);
         title.setText(mTitleArray[index]);
-        if (index == 0){
+        if (index == 0) {
             msgUnread = (ImageView) view.findViewById(R.id.tabUnread);
         }
         return view;
@@ -85,32 +85,31 @@ public class HomeActivity extends FragmentActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void logout(){
+    public void logout() {
         TlsBusiness.logout(UserInfo.getInstance().getId());
         UserInfo.getInstance().setId(null);
         MessageEvent.getInstance().clear();
         FriendshipInfo.getInstance().clear();
         GroupInfo.getInstance().clear();
-        Intent intent = new Intent(HomeActivity.this,SplashActivity.class);
+        Intent intent = new Intent(HomeActivity.this, SplashActivity.class);
         finish();
         startActivity(intent);
-
     }
 
 
     /**
      * 设置未读tab显示
      */
-    public void setMsgUnread(boolean noUnread){
-        msgUnread.setVisibility(noUnread?View.GONE:View.VISIBLE);
+    public void setMsgUnread(boolean noUnread) {
+        msgUnread.setVisibility(noUnread ? View.GONE : View.VISIBLE);
     }
 
 
-    private boolean requestPermission(){
-        if (afterM()){
+    private boolean requestPermission() {
+        if (afterM()) {
             final List<String> permissionsList = new ArrayList<>();
             if ((checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) ||
                     (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)) {
@@ -120,7 +119,7 @@ public class HomeActivity extends FragmentActivity {
         return false;
     }
 
-    private boolean afterM(){
+    private boolean afterM() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
